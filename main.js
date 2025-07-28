@@ -14,18 +14,22 @@ const app = {
 document.addEventListener('DOMContentLoaded', function() {
     initializeTheme();
     setupEventListeners();
-    checkAuthState();
+    
+    // Clear redirecting flag on page load
+    sessionStorage.removeItem('redirecting');
+    
+    // Add a small delay for GitHub Pages to prevent race conditions
+    setTimeout(() => {
+        checkAuthState();
+        updateWelcomeMessage();
+    }, 100);
+    
     initializeAnimations();
     
     // Page-specific initialization
     if (document.getElementById('schedule-container')) {
         renderSchedule();
         startLiveUpdates();
-    }
-    
-    // Update welcome message for dashboard pages
-    if (window.location.pathname.includes('dashboard')) {
-        updateWelcomeMessage();
     }
 });
 
@@ -239,16 +243,30 @@ function redirectToUserDashboard(user) {
 }
 
 function checkAuthState() {
+    // Prevent multiple redirects
+    if (sessionStorage.getItem('redirecting')) {
+        return;
+    }
+    
     const storedUser = sessionStorage.getItem('user');
+    const currentPath = window.location.pathname;
+    const currentPage = currentPath.split('/').pop() || 'index.html';
+    
+    // Debug logging for GitHub Pages
+    console.log('Current path:', currentPath);
+    console.log('Current page:', currentPage);
+    console.log('Stored user:', storedUser ? 'exists' : 'none');
     
     // Check if we're on the main login page
-    if (window.location.pathname.includes('index.html') || window.location.pathname === '/') {
+    if (currentPage === 'index.html' || currentPath === '/' || currentPath === '') {
         // For main page, redirect if already logged in
         if (storedUser) {
             try {
                 app.currentUser = JSON.parse(storedUser);
+                sessionStorage.setItem('redirecting', 'true');
                 redirectToUserDashboard(app.currentUser);
             } catch (e) {
+                console.error('Error parsing stored user:', e);
                 sessionStorage.removeItem('user');
             }
         }
@@ -257,6 +275,8 @@ function checkAuthState() {
     
     // For all other pages, check if user is logged in
     if (!storedUser) {
+        console.log('No stored user, redirecting to login');
+        sessionStorage.setItem('redirecting', 'true');
         window.location.href = 'index.html';
         return;
     }
@@ -264,23 +284,38 @@ function checkAuthState() {
     try {
         const user = JSON.parse(storedUser);
         const role = getUserRole(user.email);
+        console.log('User role:', role);
+        console.log('Current page:', currentPage);
         
-        // Check role-based access for dashboard pages
-        if (window.location.pathname.includes('admin-dashboard') && role !== 'admin') {
+        // Check role-based access for dashboard pages only
+        if (currentPage === 'admin-dashboard.html' && role !== 'admin') {
+            console.log('Non-admin trying to access admin dashboard, redirecting');
+            sessionStorage.setItem('redirecting', 'true');
             redirectToUserDashboard(user);
-        } else if (window.location.pathname.includes('teacher-dashboard') && role !== 'teacher') {
+            return;
+        } else if (currentPage === 'teacher-dashboard.html' && role !== 'teacher') {
+            console.log('Non-teacher trying to access teacher dashboard, redirecting');
+            sessionStorage.setItem('redirecting', 'true');
             redirectToUserDashboard(user);
-        } else if (window.location.pathname.includes('student-dashboard') && role !== 'student') {
+            return;
+        } else if (currentPage === 'student-dashboard.html' && role !== 'student') {
+            console.log('Non-student trying to access student dashboard, redirecting');
+            sessionStorage.setItem('redirecting', 'true');
             redirectToUserDashboard(user);
+            return;
         }
         
-        // Allow students to access all student pages (courses, grades, calendar, messages)
-        // Allow teachers to access teacher pages
-        // Allow admins to access admin pages
-        // No additional restrictions needed for role-appropriate pages
+        // For all other pages, allow access based on role
+        // Students can access: courses.html, grades.html, calendar.html, messages.html
+        // Teachers can access: teacher-specific pages
+        // Admins can access: admin-specific pages
+        
+        console.log('Access granted to:', currentPage);
         
     } catch (e) {
+        console.error('Error in checkAuthState:', e);
         sessionStorage.removeItem('user');
+        sessionStorage.setItem('redirecting', 'true');
         window.location.href = 'index.html';
     }
 }
