@@ -446,8 +446,593 @@ function animateValue(element, start, end, duration = 1000) {
     step();
 }
 
+// Google Maps Integration
+let campusMap = null;
+let mapMarkers = [];
+let infoWindows = [];
+
+// Campus data
+const campusData = {
+    center: { lat: 40.7505, lng: -73.9934 }, // Sample coordinates (NYC area)
+    buildings: [
+        { 
+            id: 'main-building', 
+            name: 'Main Academic Building', 
+            position: { lat: 40.7508, lng: -73.9930 },
+            type: 'academic',
+            rooms: ['Room 201', 'Room 105', 'Room 210', 'Room 305'],
+            description: 'Primary academic building housing mathematics, computer science, and physics departments.'
+        },
+        { 
+            id: 'science-lab', 
+            name: 'Science Laboratory', 
+            position: { lat: 40.7502, lng: -73.9940 },
+            type: 'laboratory',
+            rooms: ['Lab 103'],
+            description: 'State-of-the-art laboratory facilities for physics, chemistry, and computer science.'
+        },
+        { 
+            id: 'library', 
+            name: 'Campus Library', 
+            position: { lat: 40.7512, lng: -73.9925 },
+            type: 'library',
+            rooms: ['Study Rooms', 'Computer Lab'],
+            description: 'Modern library with extensive digital resources and collaborative study spaces.'
+        },
+        { 
+            id: 'admin-building', 
+            name: 'Administration Building', 
+            position: { lat: 40.7498, lng: -73.9945 },
+            type: 'administration',
+            rooms: ['Office 301', 'Office 302', 'Office 303'],
+            description: 'Administrative offices including registrar, financial aid, and student services.'
+        }
+    ],
+    emergencyPoints: [
+        { 
+            name: 'Campus Security', 
+            position: { lat: 40.7505, lng: -73.9935 },
+            phone: '(555) 123-4567',
+            description: '24/7 campus security office'
+        },
+        { 
+            name: 'Medical Center', 
+            position: { lat: 40.7510, lng: -73.9920 },
+            phone: '(555) 123-4568',
+            description: 'Campus health and wellness center'
+        }
+    ],
+    parkingAreas: [
+        { 
+            name: 'Student Parking A', 
+            position: { lat: 40.7495, lng: -73.9950 },
+            capacity: 150,
+            type: 'student'
+        },
+        { 
+            name: 'Faculty Parking', 
+            position: { lat: 40.7515, lng: -73.9915 },
+            capacity: 75,
+            type: 'faculty'
+        },
+        { 
+            name: 'Visitor Parking', 
+            position: { lat: 40.7500, lng: -73.9955 },
+            capacity: 50,
+            type: 'visitor'
+        }
+    ]
+};
+
+// Initialize Google Maps
+function initMap() {
+    const mapOptions = {
+        zoom: 16,
+        center: campusData.center,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        styles: getMapStyles(),
+        zoomControl: true,
+        mapTypeControl: false,
+        scaleControl: true,
+        streetViewControl: false,
+        rotateControl: false,
+        fullscreenControl: true
+    };
+
+    // Initialize maps for each dashboard
+    if (document.getElementById('student-map')) {
+        initStudentMap(mapOptions);
+    }
+    if (document.getElementById('teacher-map')) {
+        initTeacherMap(mapOptions);
+    }
+    if (document.getElementById('admin-map')) {
+        initAdminMap(mapOptions);
+    }
+}
+
+// Student Map Initialization
+function initStudentMap(mapOptions) {
+    const studentMap = new google.maps.Map(document.getElementById('student-map'), mapOptions);
+    
+    // Add building markers
+    campusData.buildings.forEach(building => {
+        addBuildingMarker(studentMap, building, 'student');
+    });
+    
+    // Add user location marker (simulated)
+    addUserLocationMarker(studentMap, { lat: 40.7506, lng: -73.9932 }, 'Your Location');
+    
+    campusMap = studentMap;
+}
+
+// Teacher Map Initialization
+function initTeacherMap(mapOptions) {
+    const teacherMap = new google.maps.Map(document.getElementById('teacher-map'), mapOptions);
+    
+    // Add building markers with classroom focus
+    campusData.buildings.forEach(building => {
+        addBuildingMarker(teacherMap, building, 'teacher');
+    });
+    
+    // Add faculty office marker
+    addOfficeMarker(teacherMap, { lat: 40.7499, lng: -73.9944 }, 'Faculty Office 301');
+    
+    campusMap = teacherMap;
+}
+
+// Admin Map Initialization
+function initAdminMap(mapOptions) {
+    const adminMap = new google.maps.Map(document.getElementById('admin-map'), mapOptions);
+    
+    // Add all campus features
+    campusData.buildings.forEach(building => {
+        addBuildingMarker(adminMap, building, 'admin');
+    });
+    
+    // Initially hidden - will be shown when buttons are clicked
+    campusMap = adminMap;
+}
+
+// Map styling
+function getMapStyles() {
+    return [
+        {
+            "featureType": "all",
+            "elementType": "geometry.fill",
+            "stylers": [{"weight": "2.00"}]
+        },
+        {
+            "featureType": "all",
+            "elementType": "geometry.stroke",
+            "stylers": [{"color": "#9c9c9c"}]
+        },
+        {
+            "featureType": "all",
+            "elementType": "labels.text",
+            "stylers": [{"visibility": "on"}]
+        },
+        {
+            "featureType": "landscape",
+            "elementType": "all",
+            "stylers": [{"color": "#f2f2f2"}]
+        },
+        {
+            "featureType": "landscape",
+            "elementType": "geometry.fill",
+            "stylers": [{"color": "#ffffff"}]
+        },
+        {
+            "featureType": "landscape.man_made",
+            "elementType": "geometry.fill",
+            "stylers": [{"color": "#ffffff"}]
+        },
+        {
+            "featureType": "poi",
+            "elementType": "all",
+            "stylers": [{"visibility": "off"}]
+        },
+        {
+            "featureType": "road",
+            "elementType": "all",
+            "stylers": [{"saturation": -100}, {"lightness": 45}]
+        },
+        {
+            "featureType": "road",
+            "elementType": "geometry.fill",
+            "stylers": [{"color": "#eeeeee"}]
+        },
+        {
+            "featureType": "road",
+            "elementType": "labels.text.fill",
+            "stylers": [{"color": "#7b7b7b"}]
+        },
+        {
+            "featureType": "road",
+            "elementType": "labels.text.stroke",
+            "stylers": [{"color": "#ffffff"}]
+        },
+        {
+            "featureType": "road.highway",
+            "elementType": "all",
+            "stylers": [{"visibility": "simplified"}]
+        },
+        {
+            "featureType": "road.arterial",
+            "elementType": "labels.icon",
+            "stylers": [{"visibility": "off"}]
+        },
+        {
+            "featureType": "transit",
+            "elementType": "all",
+            "stylers": [{"visibility": "off"}]
+        },
+        {
+            "featureType": "water",
+            "elementType": "all",
+            "stylers": [{"color": "#46bcec"}, {"visibility": "on"}]
+        },
+        {
+            "featureType": "water",
+            "elementType": "geometry.fill",
+            "stylers": [{"color": "#c8d7d4"}]
+        },
+        {
+            "featureType": "water",
+            "elementType": "labels.text.fill",
+            "stylers": [{"color": "#070707"}]
+        },
+        {
+            "featureType": "water",
+            "elementType": "labels.text.stroke",
+            "stylers": [{"color": "#ffffff"}]
+        }
+    ];
+}
+
+// Add building markers
+function addBuildingMarker(map, building, userType) {
+    const marker = new google.maps.Marker({
+        position: building.position,
+        map: map,
+        title: building.name,
+        icon: {
+            url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+                <svg width="30" height="40" viewBox="0 0 30 40" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15 0C6.7 0 0 6.7 0 15s6.7 15 15 15 15-6.7 15-15S23.3 0 15 0zm0 25c-5.5 0-10-4.5-10-10s4.5-10 10-10 10 4.5 10 10-4.5 10-10 10z" fill="#6366f1"/>
+                    <circle cx="15" cy="15" r="8" fill="white"/>
+                    <text x="15" y="19" text-anchor="middle" font-family="Arial" font-size="10" font-weight="bold" fill="#6366f1">🏢</text>
+                </svg>
+            `),
+            scaledSize: new google.maps.Size(30, 40),
+            anchor: new google.maps.Point(15, 40)
+        }
+    });
+
+    const infoWindow = new google.maps.InfoWindow({
+        content: createBuildingInfoWindow(building, userType)
+    });
+
+    marker.addListener('click', () => {
+        closeAllInfoWindows();
+        infoWindow.open(map, marker);
+    });
+
+    mapMarkers.push(marker);
+    infoWindows.push(infoWindow);
+}
+
+// Add user location marker
+function addUserLocationMarker(map, position, title) {
+    const marker = new google.maps.Marker({
+        position: position,
+        map: map,
+        title: title,
+        icon: {
+            url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+                <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="10" cy="10" r="8" fill="#10b981" stroke="white" stroke-width="2"/>
+                    <circle cx="10" cy="10" r="3" fill="white"/>
+                </svg>
+            `),
+            scaledSize: new google.maps.Size(20, 20),
+            anchor: new google.maps.Point(10, 10)
+        }
+    });
+
+    mapMarkers.push(marker);
+}
+
+// Add office marker
+function addOfficeMarker(map, position, title) {
+    const marker = new google.maps.Marker({
+        position: position,
+        map: map,
+        title: title,
+        icon: {
+            url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+                <svg width="30" height="40" viewBox="0 0 30 40" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15 0C6.7 0 0 6.7 0 15s6.7 15 15 15 15-6.7 15-15S23.3 0 15 0zm0 25c-5.5 0-10-4.5-10-10s4.5-10 10-10 10 4.5 10 10-4.5 10-10 10z" fill="#f59e0b"/>
+                    <circle cx="15" cy="15" r="8" fill="white"/>
+                    <text x="15" y="19" text-anchor="middle" font-family="Arial" font-size="10" font-weight="bold" fill="#f59e0b">🚪</text>
+                </svg>
+            `),
+            scaledSize: new google.maps.Size(30, 40),
+            anchor: new google.maps.Point(15, 40)
+        }
+    });
+
+    const infoWindow = new google.maps.InfoWindow({
+        content: `
+            <div class="map-info-window">
+                <div class="map-info-title">${title}</div>
+                <div class="map-info-content">Faculty office hours: Mon-Fri 9:00-17:00</div>
+                <div class="map-info-actions">
+                    <button class="map-info-btn" onclick="getDirectionsToOffice()">Get Directions</button>
+                </div>
+            </div>
+        `
+    });
+
+    marker.addListener('click', () => {
+        closeAllInfoWindows();
+        infoWindow.open(map, marker);
+    });
+
+    mapMarkers.push(marker);
+    infoWindows.push(infoWindow);
+}
+
+// Create building info window content
+function createBuildingInfoWindow(building, userType) {
+    let actionButtons = '';
+    
+    if (userType === 'student') {
+        actionButtons = `
+            <button class="map-info-btn" onclick="getDirectionsTo('${building.id}')">Get Directions</button>
+            <button class="map-info-btn secondary" onclick="showBuildingSchedule('${building.id}')">View Schedule</button>
+        `;
+    } else if (userType === 'teacher') {
+        actionButtons = `
+            <button class="map-info-btn" onclick="getDirectionsTo('${building.id}')">Get Directions</button>
+            <button class="map-info-btn secondary" onclick="showClassroomDetails('${building.id}')">Classroom Info</button>
+        `;
+    } else if (userType === 'admin') {
+        actionButtons = `
+            <button class="map-info-btn" onclick="showBuildingStats('${building.id}')">Building Stats</button>
+            <button class="map-info-btn secondary" onclick="manageBuildingAccess('${building.id}')">Manage Access</button>
+        `;
+    }
+
+    return `
+        <div class="map-info-window">
+            <div class="map-info-title">${building.name}</div>
+            <div class="map-info-content">
+                ${building.description}
+                <br><br>
+                <strong>Available Rooms:</strong> ${building.rooms.join(', ')}
+            </div>
+            <div class="map-info-actions">
+                ${actionButtons}
+            </div>
+        </div>
+    `;
+}
+
+// Map interaction functions
+function showClassroomLocation(roomName) {
+    if (!campusMap) {
+        showToast('Map not loaded yet. Please wait a moment.', 'warning');
+        return;
+    }
+
+    const building = campusData.buildings.find(b => b.rooms.includes(roomName));
+    if (building) {
+        campusMap.setCenter(building.position);
+        campusMap.setZoom(18);
+        
+        // Find and trigger the marker
+        const marker = mapMarkers.find(m => m.getTitle() === building.name);
+        if (marker) {
+            google.maps.event.trigger(marker, 'click');
+        }
+        
+        showToast(`Showing location of ${roomName}`, 'success');
+    } else {
+        showToast(`Room ${roomName} not found on map`, 'error');
+    }
+}
+
+function showAllBuildings() {
+    if (!campusMap) {
+        showToast('Map not loaded yet. Please wait a moment.', 'warning');
+        return;
+    }
+    
+    // Clear existing markers
+    clearMapMarkers();
+    
+    // Add all buildings
+    campusData.buildings.forEach(building => {
+        addBuildingMarker(campusMap, building, 'admin');
+    });
+    
+    // Fit map to show all buildings
+    const bounds = new google.maps.LatLngBounds();
+    campusData.buildings.forEach(building => {
+        bounds.extend(building.position);
+    });
+    campusMap.fitBounds(bounds);
+    
+    showToast('Showing all campus buildings', 'success');
+}
+
+function showEmergencyLocations() {
+    if (!campusMap) {
+        showToast('Map not loaded yet. Please wait a moment.', 'warning');
+        return;
+    }
+    
+    // Clear existing markers
+    clearMapMarkers();
+    
+    // Add emergency points
+    campusData.emergencyPoints.forEach(point => {
+        const marker = new google.maps.Marker({
+            position: point.position,
+            map: campusMap,
+            title: point.name,
+            icon: {
+                url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+                    <svg width="30" height="40" viewBox="0 0 30 40" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 0C6.7 0 0 6.7 0 15s6.7 15 15 15 15-6.7 15-15S23.3 0 15 0zm0 25c-5.5 0-10-4.5-10-10s4.5-10 10-10 10 4.5 10 10-4.5 10-10 10z" fill="#ef4444"/>
+                        <circle cx="15" cy="15" r="8" fill="white"/>
+                        <text x="15" y="19" text-anchor="middle" font-family="Arial" font-size="8" font-weight="bold" fill="#ef4444">🚨</text>
+                    </svg>
+                `),
+                scaledSize: new google.maps.Size(30, 40),
+                anchor: new google.maps.Point(15, 40)
+            }
+        });
+
+        const infoWindow = new google.maps.InfoWindow({
+            content: `
+                <div class="map-info-window">
+                    <div class="map-info-title">${point.name}</div>
+                    <div class="map-info-content">
+                        ${point.description}<br>
+                        <strong>Emergency Phone:</strong> ${point.phone}
+                    </div>
+                    <div class="map-info-actions">
+                        <button class="map-info-btn" onclick="callEmergency('${point.phone}')">Call Now</button>
+                    </div>
+                </div>
+            `
+        });
+
+        marker.addListener('click', () => {
+            closeAllInfoWindows();
+            infoWindow.open(campusMap, marker);
+        });
+
+        mapMarkers.push(marker);
+        infoWindows.push(infoWindow);
+    });
+    
+    showToast('Showing emergency locations', 'info');
+}
+
+function showParkingAreas() {
+    if (!campusMap) {
+        showToast('Map not loaded yet. Please wait a moment.', 'warning');
+        return;
+    }
+    
+    // Clear existing markers
+    clearMapMarkers();
+    
+    // Add parking areas
+    campusData.parkingAreas.forEach(area => {
+        const marker = new google.maps.Marker({
+            position: area.position,
+            map: campusMap,
+            title: area.name,
+            icon: {
+                url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+                    <svg width="30" height="40" viewBox="0 0 30 40" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 0C6.7 0 0 6.7 0 15s6.7 15 15 15 15-6.7 15-15S23.3 0 15 0zm0 25c-5.5 0-10-4.5-10-10s4.5-10 10-10 10 4.5 10 10-4.5 10-10 10z" fill="#f59e0b"/>
+                        <circle cx="15" cy="15" r="8" fill="white"/>
+                        <text x="15" y="19" text-anchor="middle" font-family="Arial" font-size="10" font-weight="bold" fill="#f59e0b">P</text>
+                    </svg>
+                `),
+                scaledSize: new google.maps.Size(30, 40),
+                anchor: new google.maps.Point(15, 40)
+            }
+        });
+
+        const infoWindow = new google.maps.InfoWindow({
+            content: `
+                <div class="map-info-window">
+                    <div class="map-info-title">${area.name}</div>
+                    <div class="map-info-content">
+                        Type: ${area.type.charAt(0).toUpperCase() + area.type.slice(1)} parking<br>
+                        Capacity: ${area.capacity} spaces<br>
+                        <strong>Estimated availability:</strong> ${Math.floor(Math.random() * 30) + 10} spaces
+                    </div>
+                    <div class="map-info-actions">
+                        <button class="map-info-btn" onclick="getDirectionsTo('${area.name}')">Get Directions</button>
+                    </div>
+                </div>
+            `
+        });
+
+        marker.addListener('click', () => {
+            closeAllInfoWindows();
+            infoWindow.open(campusMap, marker);
+        });
+
+        mapMarkers.push(marker);
+        infoWindows.push(infoWindow);
+    });
+    
+    showToast('Showing parking areas', 'success');
+}
+
+function showCampusStats() {
+    showToast('Campus Statistics: 4 Buildings, 2 Emergency Points, 3 Parking Areas', 'info');
+}
+
+// Utility functions
+function closeAllInfoWindows() {
+    infoWindows.forEach(infoWindow => {
+        infoWindow.close();
+    });
+}
+
+function clearMapMarkers() {
+    mapMarkers.forEach(marker => {
+        marker.setMap(null);
+    });
+    mapMarkers = [];
+    infoWindows = [];
+}
+
+function getDirectionsTo(locationId) {
+    showToast(`Getting directions to ${locationId}...`, 'info');
+    // In a real implementation, this would integrate with Google Directions API
+}
+
+function getDirectionsToOffice() {
+    showToast('Getting directions to faculty office...', 'info');
+}
+
+function showBuildingSchedule(buildingId) {
+    showToast(`Loading schedule for ${buildingId}...`, 'info');
+}
+
+function showClassroomDetails(buildingId) {
+    showToast(`Loading classroom details for ${buildingId}...`, 'info');
+}
+
+function showBuildingStats(buildingId) {
+    showToast(`Loading building statistics for ${buildingId}...`, 'info');
+}
+
+function manageBuildingAccess(buildingId) {
+    showToast(`Opening access management for ${buildingId}...`, 'info');
+}
+
+function callEmergency(phone) {
+    showToast(`Emergency contact: ${phone}`, 'warning');
+    // In a real implementation, this could open the phone app
+}
+
+// Initialize maps when Google Maps API is loaded
+window.initMap = initMap;
+
 // Keyboard shortcuts info
 console.log('🚀 CampusConnect Keyboard Shortcuts:');
 console.log('Ctrl+K: Quick search');
 console.log('Escape: Close modals');
+console.log('🗺️ Google Maps integration added to all dashboards!');
 console.log('Enjoy your modern campus experience!');
