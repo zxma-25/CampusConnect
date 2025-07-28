@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar - CampusConnect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <header class="header">
+        <div class="nav-container">
+            <a href="student-dashboard.html" class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>CampusConnect</span>
+            </a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="student-dashboard.html" class="nav-link">Dashboard</a></li>
+                    <li><a href="courses.html" class="nav-link">Courses</a></li>
+                    <li><a href="grades.html" class="nav-link">Grades</a></li>
+                    <li><a href="calendar.html" class="nav-link active">Calendar</a></li>
+                    <li><a href="messages.html" class="nav-link">Messages</a></li>
+                </ul>
+            </nav>
+            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+    <div class="main-container">
+        <section class="welcome-section">
+            <h1 class="welcome-title">Calendar</h1>
+            <p class="welcome-subtitle">Keep track of your academic schedule and events here.</p>
+        </section>
+
+        <!-- Calendar Controls -->
+        <div class="calendar-controls">
+            <div class="calendar-nav">
+                <button class="btn btn-secondary" onclick="previousMonth()">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <h2 id="current-month">December 2024</h2>
+                <button class="btn btn-secondary" onclick="nextMonth()">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            <div class="calendar-actions">
+                <button class="btn btn-primary" onclick="showToast('Adding new event...', 'info')">
+                    <i class="fas fa-plus"></i> Add Event
+                </button>
+                <button class="btn btn-secondary" onclick="today()">
+                    <i class="fas fa-calendar-day"></i> Today
+                </button>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="main-panel">
+                <!-- Calendar Grid -->
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <div class="calendar-day-header">Sun</div>
+                        <div class="calendar-day-header">Mon</div>
+                        <div class="calendar-day-header">Tue</div>
+                        <div class="calendar-day-header">Wed</div>
+                        <div class="calendar-day-header">Thu</div>
+                        <div class="calendar-day-header">Fri</div>
+                        <div class="calendar-day-header">Sat</div>
+                    </div>
+                    <div class="calendar-grid" id="calendar-grid">
+                        <!-- Calendar days will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="side-panel">
+                <!-- Today's Schedule -->
+                <div class="today-schedule">
+                    <h3><i class="fas fa-calendar-day"></i> Today's Schedule</h3>
+                    <div class="schedule-item course">
+                        <div class="schedule-time">09:00 - 10:30</div>
+                        <div class="schedule-content">
+                            <div class="schedule-title">Advanced Mathematics</div>
+                            <div class="schedule-location">Room 201 - Prof. Johnson</div>
+                        </div>
+                        <div class="schedule-icon" style="background: var(--primary-color);">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                    </div>
+                    <div class="schedule-item course">
+                        <div class="schedule-time">11:00 - 12:30</div>
+                        <div class="schedule-content">
+                            <div class="schedule-title">Statistics & Probability</div>
+                            <div class="schedule-location">Room 105 - Dr. Smith</div>
+                        </div>
+                        <div class="schedule-icon" style="background: var(--secondary-color);">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                    </div>
+                    <div class="schedule-item course">
+                        <div class="schedule-time">14:00 - 15:30</div>
+                        <div class="schedule-content">
+                            <div class="schedule-title">English Literature</div>
+                            <div class="schedule-location">Room 305 - Prof. Williams</div>
+                        </div>
+                        <div class="schedule-icon" style="background: var(--warning-color);">
+                            <i class="fas fa-book"></i>
+                        </div>
+                    </div>
+                    <div class="schedule-item course">
+                        <div class="schedule-time">16:00 - 17:30</div>
+                        <div class="schedule-content">
+                            <div class="schedule-title">Physics Fundamentals</div>
+                            <div class="schedule-location">Lab 103 - Dr. Brown</div>
+                        </div>
+                        <div class="schedule-icon" style="background: var(--info-color);">
+                            <i class="fas fa-flask"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upcoming Events -->
+                <div class="upcoming-events">
+                    <h3><i class="fas fa-calendar-alt"></i> Upcoming Events</h3>
+                    <div class="event-item holiday">
+                        <div class="event-date">Dec 25</div>
+                        <div class="event-content">
+                            <div class="event-title">Christmas Day</div>
+                            <div class="event-type">Holiday - Campus Closed</div>
+                        </div>
+                        <div class="event-icon" style="background: var(--error-color);">
+                            <i class="fas fa-gift"></i>
+                        </div>
+                    </div>
+                    <div class="event-item academic">
+                        <div class="event-date">Dec 15</div>
+                        <div class="event-content">
+                            <div class="event-title">Math Assignment Due</div>
+                            <div class="event-type">Assignment - MATH101</div>
+                        </div>
+                        <div class="event-icon" style="background: var(--warning-color);">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                    </div>
+                    <div class="event-item academic">
+                        <div class="event-date">Dec 18</div>
+                        <div class="event-content">
+                            <div class="event-title">English Essay Due</div>
+                            <div class="event-type">Assignment - ENG101</div>
+                        </div>
+                        <div class="event-icon" style="background: var(--warning-color);">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                    </div>
+                    <div class="event-item holiday">
+                        <div class="event-date">Dec 31</div>
+                        <div class="event-content">
+                            <div class="event-title">New Year's Eve</div>
+                            <div class="event-type">Holiday - Campus Closed</div>
+                        </div>
+                        <div class="event-icon" style="background: var(--error-color);">
+                            <i class="fas fa-fireworks"></i>
+                        </div>
+                    </div>
+                    <div class="event-item academic">
+                        <div class="event-date">Jan 15</div>
+                        <div class="event-content">
+                            <div class="event-title">Spring Semester Begins</div>
+                            <div class="event-type">Academic - First Day</div>
+                        </div>
+                        <div class="event-icon" style="background: var(--success-color);">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Add Event -->
+                <div class="quick-add-event">
+                    <h3><i class="fas fa-plus-circle"></i> Quick Add Event</h3>
+                    <form class="event-form">
+                        <div class="form-group">
+                            <label for="event-title">Event Title</label>
+                            <input type="text" id="event-title" class="form-input" placeholder="Enter event title">
+                        </div>
+                        <div class="form-group">
+                            <label for="event-date">Date</label>
+                            <input type="date" id="event-date" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="event-type">Type</label>
+                            <select id="event-type" class="form-input">
+                                <option value="academic">Academic</option>
+                                <option value="personal">Personal</option>
+                                <option value="holiday">Holiday</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary" onclick="showToast('Event added successfully!', 'success')">
+                            <i class="fas fa-plus"></i> Add Event
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast" class="toast"></div>
+
+    <script src="main.js"></script>
+    <script src="assets/scripts/calendar.js"></script>
+</body>
+</html> 

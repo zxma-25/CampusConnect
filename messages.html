@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages - CampusConnect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <header class="header">
+        <div class="nav-container">
+            <a href="student-dashboard.html" class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>CampusConnect</span>
+            </a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="student-dashboard.html" class="nav-link">Dashboard</a></li>
+                    <li><a href="courses.html" class="nav-link">Courses</a></li>
+                    <li><a href="grades.html" class="nav-link">Grades</a></li>
+                    <li><a href="calendar.html" class="nav-link">Calendar</a></li>
+                    <li><a href="messages.html" class="nav-link active">Messages</a></li>
+                </ul>
+            </nav>
+            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+    <div class="main-container">
+        <section class="welcome-section">
+            <h1 class="welcome-title">Messages</h1>
+            <p class="welcome-subtitle">Check your messages and communicate with others here.</p>
+        </section>
+
+        <!-- School Ending Soon Alert -->
+        <div class="alert-message" style="background: linear-gradient(135deg, #f59e0b, #ef4444); color: white; padding: 1.5rem; border-radius: var(--border-radius); margin-bottom: 2rem; text-align: center; box-shadow: var(--shadow);">
+            <div style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;">
+                <i class="fas fa-clock"></i> School Year Ending Soon!
+            </div>
+            <div style="font-size: 1.125rem; margin-bottom: 1rem;">
+                The academic year is coming to an end. Make sure to complete all assignments and prepare for final exams.
+            </div>
+            <div id="countdown" style="font-size: 2rem; font-weight: 700; margin-bottom: 1rem;">
+                <!-- Countdown will be populated by JavaScript -->
+            </div>
+            <div style="font-size: 0.875rem; opacity: 0.9;">
+                <i class="fas fa-calendar-alt"></i> Final Day: December 20, 2024
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="main-panel">
+                <h3 style="color: var(--text-color); margin-bottom: 1.5rem;">
+                    <i class="fas fa-envelope"></i> Important Messages
+                </h3>
+                
+                <div class="message-list">
+                    <div class="message-item important">
+                        <div class="message-icon" style="background: var(--warning-color);">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="message-content">
+                            <div class="message-header">
+                                <div class="message-sender">Academic Office</div>
+                                <div class="message-time">2 hours ago</div>
+                            </div>
+                            <div class="message-title">Final Exam Schedule Released</div>
+                            <div class="message-preview">The final exam schedule for all courses has been posted. Please check your course pages for specific dates and times.</div>
+                        </div>
+                        <div class="message-status unread"></div>
+                    </div>
+
+                    <div class="message-item">
+                        <div class="message-icon" style="background: var(--primary-color);">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <div class="message-content">
+                            <div class="message-header">
+                                <div class="message-sender">Prof. Johnson</div>
+                                <div class="message-time">1 day ago</div>
+                            </div>
+                            <div class="message-title">Mathematics Final Assignment</div>
+                            <div class="message-preview">Reminder: Your final mathematics assignment is due this Friday. Please ensure all calculations are double-checked.</div>
+                        </div>
+                        <div class="message-status read"></div>
+                    </div>
+
+                    <div class="message-item">
+                        <div class="message-icon" style="background: var(--secondary-color);">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="message-content">
+                            <div class="message-header">
+                                <div class="message-sender">Library Services</div>
+                                <div class="message-time">2 days ago</div>
+                            </div>
+                            <div class="message-title">Library Closing Notice</div>
+                            <div class="message-preview">The campus library will close for the semester on December 18th. Please return all borrowed materials by this date.</div>
+                        </div>
+                        <div class="message-status read"></div>
+                    </div>
+
+                    <div class="message-item">
+                        <div class="message-icon" style="background: var(--info-color);">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="message-content">
+                            <div class="message-header">
+                                <div class="message-sender">Student Services</div>
+                                <div class="message-time">3 days ago</div>
+                            </div>
+                            <div class="message-title">End of Semester Checklist</div>
+                            <div class="message-preview">Complete your end-of-semester checklist: return library books, clear any outstanding fees, and collect personal items from lockers.</div>
+                        </div>
+                        <div class="message-status read"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="side-panel">
+                <div class="quick-actions">
+                    <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                    <div class="action-buttons">
+                        <button class="action-btn" onclick="showToast('Composing new message...', 'info')">
+                            <i class="fas fa-plus"></i> New Message
+                        </button>
+                        <button class="action-btn secondary" onclick="showToast('Checking for updates...', 'info')">
+                            <i class="fas fa-sync"></i> Refresh
+                        </button>
+                        <button class="action-btn warning" onclick="showToast('Opening settings...', 'info')">
+                            <i class="fas fa-cog"></i> Settings
+                        </button>
+                    </div>
+                </div>
+
+                <div class="message-stats">
+                    <h3><i class="fas fa-chart-bar"></i> Message Statistics</h3>
+                    <div class="stat-item">
+                        <div class="stat-label">Unread Messages</div>
+                        <div class="stat-value">1</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Total Messages</div>
+                        <div class="stat-value">24</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Important</div>
+                        <div class="stat-value">3</div>
+                    </div>
+                </div>
+
+                <div class="end-of-semester-info">
+                    <h3><i class="fas fa-info-circle"></i> End of Semester Info</h3>
+                    <div class="info-item">
+                        <div class="info-icon" style="background: var(--warning-color);">
+                            <i class="fas fa-calendar"></i>
+                        </div>
+                        <div class="info-content">
+                            <div class="info-title">Final Exams</div>
+                            <div class="info-detail">Dec 15-19, 2024</div>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon" style="background: var(--danger-color);">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="info-content">
+                            <div class="info-title">Last Day of Classes</div>
+                            <div class="info-detail">Dec 20, 2024</div>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon" style="background: var(--success-color);">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <div class="info-content">
+                            <div class="info-title">Winter Break</div>
+                            <div class="info-detail">Dec 21 - Jan 15</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast" class="toast"></div>
+
+    <script src="main.js"></script>
+    <script src="assets/scripts/messages.js"></script>
+</body>
+</html> 

@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses - CampusConnect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <header class="header">
+        <div class="nav-container">
+            <a href="student-dashboard.html" class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>CampusConnect</span>
+            </a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="student-dashboard.html" class="nav-link">Dashboard</a></li>
+                    <li><a href="courses.html" class="nav-link active">Courses</a></li>
+                    <li><a href="grades.html" class="nav-link">Grades</a></li>
+                    <li><a href="calendar.html" class="nav-link">Calendar</a></li>
+                    <li><a href="messages.html" class="nav-link">Messages</a></li>
+                </ul>
+            </nav>
+            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+    <div class="main-container">
+        <section class="welcome-section">
+            <h1 class="welcome-title">Courses</h1>
+            <p class="welcome-subtitle">Browse and manage your enrolled courses here.</p>
+        </section>
+        
+        <!-- Course Filters -->
+        <div class="course-filters">
+            <div class="filter-group">
+                <label for="department-filter">Department:</label>
+                <select id="department-filter" class="filter-select">
+                    <option value="all">All Departments</option>
+                    <option value="mathematics">Mathematics</option>
+                    <option value="english">English</option>
+                    <option value="sciences">Physical Sciences</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="status-filter">Status:</label>
+                <select id="status-filter" class="filter-select">
+                    <option value="all">All Courses</option>
+                    <option value="enrolled">Enrolled</option>
+                    <option value="available">Available</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="main-panel">
+                <h3 style="color: var(--text-color); margin-bottom: 1.5rem;">
+                    <i class="fas fa-book-open"></i> Your Courses
+                </h3>
+                
+                <!-- Course Grid -->
+                <div class="course-grid">
+                    <!-- Mathematics Courses -->
+                    <div class="course-card enrolled" data-department="mathematics" data-status="enrolled">
+                        <div class="course-header">
+                            <div class="course-code">MATH101</div>
+                            <div class="course-status enrolled">Enrolled</div>
+                        </div>
+                        <h4 class="course-title">Advanced Mathematics</h4>
+                        <p class="course-description">Comprehensive study of calculus, linear algebra, and mathematical analysis.</p>
+                        <div class="course-details">
+                            <div class="course-detail">
+                                <i class="fas fa-user"></i>
+                                <span>Prof. Johnson</span>
+                            </div>
+                            <div class="course-detail">
+                                <i class="fas fa-clock"></i>
+                                <span>Mon, Wed, Fri 09:00-10:30</span>
+                            </div>
+                            <div class="course-detail">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Room 201</span>
+                            </div>
+                            <div class="course-detail">
+                                <i class="fas fa-users"></i>
+                                <span>45 students</span>
+                            </div>
+                        </div>
+                        <div class="course-actions">
+                            <button class="btn btn-primary" onclick="showToast('Opening course materials...', 'success')">
+                                <i class="fas fa-folder-open"></i> Materials
+                            </button>
+                            <button class="btn btn-secondary" onclick="showToast('Opening assignments...', 'success')">
+                                <i class="fas fa-tasks"></i> Assignments
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="course-card enrolled" data-department="mathematics" data-status="enrolled">
+                        <div class="course-header">
+                            <div class="course-code">MATH201</div>
+                            <div class="course-status enrolled">Enrolled</div>
+                        </div>
+                        <h4 class="course-title">Statistics & Probability</h4>
+                        <p class="course-description">Introduction to statistical methods, probability theory, and data analysis.</p>
+                        <div class="course-details">
+                            <div class="course-detail">
+                                <i class="fas fa-user"></i>
+                                <span>Dr. Smith</span>
+                            </div>
+                            <div class="course-detail">
+                                <i class="fas fa-clock"></i>
+                                <span>Tue, Thu 11:00-12:30</span>
+                            </div>
+                            <div class="course-detail">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Room 105</span>
+                            </div>
+                            <div class="course-detail">
+                                <i class="fas fa-users"></i>
+                                <span>38 students</span>
+                            </div>
+                        </div>
+                        <div class="course-actions">
+                            <button class="btn btn-primary" onclick="showToast('Opening course materials...', 'success')">
+                                <i class="fas fa-folder-open"></i> Materials
+                            </button>
+                            <button class="btn btn-secondary" onclick="showToast('Opening assignments...', 'success')">
+                                <i class="fas fa-tasks"></i> Assignments
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- English Courses -->
+                    <div class="course-card enrolled" data-department="english" data-status="enrolled">
+                        <div class="course-header">
+                            <div class="course-code">ENG101</div>
+                            <div class="course-status enrolled">Enrolled</div>
+                        </div>
+                        <h4 class="course-title">English Literature</h4>
+                        <p class="course-description">Study of classic and contemporary literature with critical analysis.</p>
+                        <div class="course-details">
+                            <div class="course-detail">
+                                <i class="fas fa-user"></i>
+                                <span>Prof. Williams</span>
+                            </div>
+                            <div class="course-detail">
+                                <i class="fas fa-clock"></i>
+                                <span>Mon, Wed 14:00-15:30</span>
+                            </div>
+                            <div class="course-detail">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Room 305</span>
+                            </div>
+                            <div class="course-detail">
+                                <i class="fas fa-users"></i>
+                                <span>42 students</span>
+                            </div>
+                        </div>
+                        <div class="course-actions">
+                            <button class="btn btn-primary" onclick="showToast('Opening course materials...', 'success')">
+                                <i class="fas fa-folder-open"></i> Materials
+                            </button>
+                            <button class="btn btn-secondary" onclick="showToast('Opening assignments...', 'success')">
+                                <i class="fas fa-tasks"></i> Assignments
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="course-card available" data-department="english" data-status="available">
+                        <div class="course-header">
+                            <div class="course-code">ENG201</div>
+                            <div class="course-status available">Available</div>
+                        </div>
+                        <h4 class="course-title">Creative Writing</h4>
+                        <p class="course-description">Develop creative writing skills through workshops and peer review.</p>
+                        <div class="course-details">
+                            <div class="course-detail">
+                                <i class="fas fa-user"></i>
+                                <span>Prof. Davis</span>
+                            </div>
+                            <div class="course-detail">
+                                <i class="fas fa-clock"></i>
+                                <span>Tue, Thu 16:00-17:30</span>
+                            </div>
+                            <div class="course-detail">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Room 210</span>
+                            </div>
+                            <div class="course-detail">
+                                <i class="fas fa-users"></i>
+                                <span>25 students</span>
+                            </div>
+                        </div>
+                        <div class="course-actions">
+                            <button class="btn btn-primary" onclick="showToast('Enrolling in Creative Writing...', 'success')">
+                                <i class="fas fa-plus"></i> Enroll
+                            </button>
+                            <button class="btn btn-secondary" onclick="showToast('Viewing course details...', 'info')">
+                                <i class="fas fa-info-circle"></i> Details
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Physical Sciences Courses -->
+                    <div class="course-card enrolled" data-department="sciences" data-status="enrolled">
+                        <div class="course-header">
+                            <div class="course-code">PHY101</div>
+                            <div class="course-status enrolled">Enrolled</div>
+                        </div>
+                        <h4 class="course-title">Physics Fundamentals</h4>
+                        <p class="course-description">Introduction to mechanics, thermodynamics, and wave phenomena.</p>
+                        <div class="course-details">
+                            <div class="course-detail">
+                                <i class="fas fa-user"></i>
+                                <span>Dr. Brown</span>
+                            </div>
+                            <div class="course-detail">
+                                <i class="fas fa-clock"></i>
+                                <span>Mon, Wed, Fri 11:00-12:30</span>
+                            </div>
+                            <div class="course-detail">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Lab 103</span>
+                            </div>
+                            <div class="course-detail">
+                                <i class="fas fa-users"></i>
+                                <span>35 students</span>
+                            </div>
+                        </div>
+                        <div class="course-actions">
+                            <button class="btn btn-primary" onclick="showToast('Opening course materials...', 'success')">
+                                <i class="fas fa-folder-open"></i> Materials
+                            </button>
+                            <button class="btn btn-secondary" onclick="showToast('Opening assignments...', 'success')">
+                                <i class="fas fa-tasks"></i> Assignments
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="course-card available" data-department="sciences" data-status="available">
+                        <div class="course-header">
+                            <div class="course-code">CHEM101</div>
+                            <div class="course-status available">Available</div>
+                        </div>
+                        <h4 class="course-title">General Chemistry</h4>
+                        <p class="course-description">Study of chemical principles, reactions, and laboratory techniques.</p>
+                        <div class="course-details">
+                            <div class="course-detail">
+                                <i class="fas fa-user"></i>
+                                <span>Prof. Garcia</span>
+                            </div>
+                            <div class="course-detail">
+                                <i class="fas fa-clock"></i>
+                                <span>Tue, Thu 09:00-10:30</span>
+                            </div>
+                            <div class="course-detail">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Lab 205</span>
+                            </div>
+                            <div class="course-detail">
+                                <i class="fas fa-users"></i>
+                                <span>40 students</span>
+                            </div>
+                        </div>
+                        <div class="course-actions">
+                            <button class="btn btn-primary" onclick="showToast('Enrolling in General Chemistry...', 'success')">
+                                <i class="fas fa-plus"></i> Enroll
+                            </button>
+                            <button class="btn btn-secondary" onclick="showToast('Viewing course details...', 'info')">
+                                <i class="fas fa-info-circle"></i> Details
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="side-panel">
+                <div class="course-summary">
+                    <h3><i class="fas fa-chart-pie"></i> Course Summary</h3>
+                    <div class="summary-stats">
+                        <div class="summary-stat">
+                            <div class="stat-number">5</div>
+                            <div class="stat-label">Enrolled Courses</div>
+                        </div>
+                        <div class="summary-stat">
+                            <div class="stat-number">2</div>
+                            <div class="stat-label">Available Courses</div>
+                        </div>
+                        <div class="summary-stat">
+                            <div class="stat-number">18</div>
+                            <div class="stat-label">Total Credits</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="upcoming-deadlines">
+                    <h3><i class="fas fa-calendar-alt"></i> Upcoming Deadlines</h3>
+                    <div class="deadline-item">
+                        <div class="deadline-date">Dec 15</div>
+                        <div class="deadline-info">
+                            <div class="deadline-title">Math Assignment #3</div>
+                            <div class="deadline-course">MATH101</div>
+                        </div>
+                    </div>
+                    <div class="deadline-item">
+                        <div class="deadline-date">Dec 18</div>
+                        <div class="deadline-info">
+                            <div class="deadline-title">Literature Essay</div>
+                            <div class="deadline-course">ENG101</div>
+                        </div>
+                    </div>
+                    <div class="deadline-item">
+                        <div class="deadline-date">Dec 20</div>
+                        <div class="deadline-info">
+                            <div class="deadline-title">Physics Lab Report</div>
+                            <div class="deadline-course">PHY101</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast" class="toast"></div>
+
+    <script src="main.js"></script>
+    <script>
+        // Course filtering functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const departmentFilter = document.getElementById('department-filter');
+            const statusFilter = document.getElementById('status-filter');
+            const courseCards = document.querySelectorAll('.course-card');
+
+            function filterCourses() {
+                const selectedDepartment = departmentFilter.value;
+                const selectedStatus = statusFilter.value;
+
+                courseCards.forEach(card => {
+                    const department = card.dataset.department;
+                    const status = card.dataset.status;
+                    
+                    const departmentMatch = selectedDepartment === 'all' || department === selectedDepartment;
+                    const statusMatch = selectedStatus === 'all' || status === selectedStatus;
+                    
+                    if (departmentMatch && statusMatch) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+
+            departmentFilter.addEventListener('change', filterCourses);
+            statusFilter.addEventListener('change', filterCourses);
+        });
+    </script>
+</body>
+</html> 

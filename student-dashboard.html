@@ -7,24 +7,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="styles.css" rel="stylesheet">
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3NoV3GLBQe4ginEV2D8zeeOJNv5aKSXs&callback=initMap&libraries=places"></script>
 </head>
 <body>
     <div class="bg-animation"></div>
     
+    <!-- Header -->
     <header class="header">
         <div class="nav-container">
-            <a href="index.html" class="logo">
+            <a href="student-dashboard.html" class="logo">
                 <i class="fas fa-graduation-cap"></i>
                 <span>CampusConnect</span>
             </a>
             <nav>
                 <ul class="nav-menu">
                     <li><a href="student-dashboard.html" class="nav-link active">Dashboard</a></li>
-                    <li><a href="#" class="nav-link">My Courses</a></li>
-                    <li><a href="#" class="nav-link">Assignments</a></li>
-                    <li><a href="#" class="nav-link">Grades</a></li>
-                    <li><a href="#" class="nav-link">Schedule</a></li>
+                    <li><a href="courses.html" class="nav-link">Courses</a></li>
+                    <li><a href="grades.html" class="nav-link">Grades</a></li>
+                    <li><a href="calendar.html" class="nav-link">Calendar</a></li>
+                    <li><a href="messages.html" class="nav-link">Messages</a></li>
                 </ul>
             </nav>
             <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
@@ -33,193 +33,181 @@
         </div>
     </header>
 
+    <!-- Main Content -->
     <div class="main-container">
+        <!-- Welcome Section -->
         <section class="welcome-section">
-            <h1 class="welcome-title" id="welcome-title">Student Dashboard</h1>
-            <p class="welcome-subtitle">Track your academic progress and stay on top of your studies</p>
+            <h1 class="welcome-title" id="welcome-title">Welcome to CampusConnect</h1>
+            <p class="welcome-subtitle">Your personalized student portal for academic success</p>
         </section>
 
+        <!-- Stats Grid -->
         <div class="stats-grid">
-            <div class="stat-card">
+            <div class="stat-card" data-animate="fadeInUp" style="animation-delay: 0.1s">
                 <div class="stat-header">
                     <div class="stat-icon" style="background: var(--primary-color);">
                         <i class="fas fa-book-open"></i>
                     </div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i> 12%
+                    </div>
                 </div>
-                <div class="stat-value">6</div>
-                <div class="stat-label">Enrolled Courses</div>
+                <div class="stat-value" id="courses-count">5</div>
+                <div class="stat-label">Active Courses</div>
             </div>
 
-            <div class="stat-card">
+            <div class="stat-card" data-animate="fadeInUp" style="animation-delay: 0.2s">
                 <div class="stat-header">
                     <div class="stat-icon" style="background: var(--secondary-color);">
                         <i class="fas fa-chart-line"></i>
                     </div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i> 0.15
+                    </div>
                 </div>
-                <div class="stat-value">3.7</div>
+                <div class="stat-value" id="gpa-value">3.85</div>
                 <div class="stat-label">Current GPA</div>
             </div>
 
-            <div class="stat-card">
+            <div class="stat-card" data-animate="fadeInUp" style="animation-delay: 0.3s">
                 <div class="stat-header">
                     <div class="stat-icon" style="background: var(--warning-color);">
                         <i class="fas fa-tasks"></i>
                     </div>
+                    <div class="stat-change negative">
+                        <i class="fas fa-arrow-down"></i> 3
+                    </div>
                 </div>
-                <div class="stat-value">5</div>
+                <div class="stat-value" id="assignments-count">3</div>
                 <div class="stat-label">Pending Assignments</div>
             </div>
 
-            <div class="stat-card">
+            <div class="stat-card" data-animate="fadeInUp" style="animation-delay: 0.4s">
                 <div class="stat-header">
                     <div class="stat-icon" style="background: var(--info-color);">
-                        <i class="fas fa-calendar-check"></i>
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i> 1
                     </div>
                 </div>
-                <div class="stat-value">12</div>
-                <div class="stat-label">Completed Credits</div>
+                <div class="stat-value" id="messages-count">1</div>
+                <div class="stat-label">Unread Messages</div>
             </div>
         </div>
 
+        <!-- Dashboard Grid -->
         <div class="dashboard-grid">
             <div class="main-panel">
                 <h3 style="margin-bottom: 1.5rem; color: var(--text-color);">
-                    <i class="fas fa-book"></i> My Courses
+                    <i class="fas fa-calendar-alt"></i> Upcoming Schedule
                 </h3>
-                
-                <div class="course-card">
-                    <div class="course-header">
-                        <div>
-                            <div class="course-name">Advanced Mathematics</div>
-                            <div class="course-code">MATH 301</div>
-                        </div>
-                    </div>
-                    <p style="color: var(--text-muted); margin-bottom: 1rem;">Prof. Johnson • MWF 9:00-10:00</p>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 75%;"></div>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span style="font-size: 0.875rem; color: var(--text-muted);">Progress: 75%</span>
-                        <button class="btn btn-primary" onclick="showToast('Opening course details...', 'success')">
-                            View Course
-                        </button>
-                    </div>
-                </div>
-
-                <div class="course-card">
-                    <div class="course-header">
-                        <div>
-                            <div class="course-name">Computer Science Fundamentals</div>
-                            <div class="course-code">CS 101</div>
-                        </div>
-                    </div>
-                    <p style="color: var(--text-muted); margin-bottom: 1rem;">Prof. Smith • TTh 2:00-3:30</p>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 60%;"></div>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span style="font-size: 0.875rem; color: var(--text-muted);">Progress: 60%</span>
-                        <button class="btn btn-primary" onclick="showToast('Opening course details...', 'success')">
-                            View Course
-                        </button>
-                    </div>
-                </div>
-
-                <div class="course-card">
-                    <div class="course-header">
-                        <div>
-                            <div class="course-name">Physics Laboratory</div>
-                            <div class="course-code">PHYS 201L</div>
-                        </div>
-                    </div>
-                    <p style="color: var(--text-muted); margin-bottom: 1rem;">Dr. Wilson • W 1:00-4:00</p>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 85%;"></div>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span style="font-size: 0.875rem; color: var(--text-muted);">Progress: 85%</span>
-                        <button class="btn btn-primary" onclick="showToast('Opening course details...', 'success')">
-                            View Course
-                        </button>
-                    </div>
+                <div id="schedule-container">
+                    <!-- Schedule will be dynamically populated -->
                 </div>
             </div>
 
             <div class="side-panel">
-                <div style="background: var(--surface-color); border-radius: var(--border-radius); padding: 1.5rem; box-shadow: var(--shadow); border: 1px solid var(--border-color);">
-                    <h3 style="margin-bottom: 1rem;"><i class="fas fa-clipboard-list"></i> Upcoming Assignments</h3>
-                    
-                    <div class="assignment-item">
-                        <div class="assignment-icon" style="background: var(--danger-color);">
-                            <i class="fas fa-exclamation"></i>
-                        </div>
-                        <div style="flex: 1;">
-                            <div style="font-weight: 600;">Math Homework Ch. 5</div>
-                            <div style="font-size: 0.875rem; color: var(--text-muted);">Due: Tomorrow</div>
-                        </div>
-                    </div>
-
-                    <div class="assignment-item">
-                        <div class="assignment-icon" style="background: var(--warning-color);">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <div style="flex: 1;">
-                            <div style="font-weight: 600;">CS Project Proposal</div>
-                            <div style="font-size: 0.875rem; color: var(--text-muted);">Due: Friday</div>
-                        </div>
-                    </div>
-
-                    <div class="assignment-item">
-                        <div class="assignment-icon" style="background: var(--info-color);">
-                            <i class="fas fa-flask"></i>
-                        </div>
-                        <div style="flex: 1;">
-                            <div style="font-weight: 600;">Physics Lab Report</div>
-                            <div style="font-size: 0.875rem; color: var(--text-muted);">Due: Next Week</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div style="background: var(--surface-color); border-radius: var(--border-radius); padding: 1.5rem; box-shadow: var(--shadow); border: 1px solid var(--border-color);">
-                    <h3 style="margin-bottom: 1rem;"><i class="fas fa-bolt"></i> Quick Actions</h3>
-                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                        <button class="btn btn-primary" onclick="showToast('Opening submission portal...', 'success')">
-                            <i class="fas fa-upload"></i> Submit Assignment
+                <div class="quick-actions">
+                    <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                    <div class="action-buttons">
+                        <button class="action-btn" onclick="window.location.href='courses.html'">
+                            <i class="fas fa-search"></i> View Courses
                         </button>
-                        <button class="btn btn-secondary" onclick="showToast('Opening gradebook...', 'success')">
-                            <i class="fas fa-chart-bar"></i> View Grades
+                        <button class="action-btn secondary" onclick="window.location.href='grades.html'">
+                            <i class="fas fa-chart-bar"></i> Check Grades
                         </button>
-                        <button class="btn btn-warning" onclick="showToast('Opening calendar...', 'success')">
-                            <i class="fas fa-calendar"></i> Check Schedule
+                        <button class="action-btn warning" onclick="window.location.href='calendar.html'">
+                            <i class="fas fa-calendar"></i> View Calendar
+                        </button>
+                        <button class="action-btn" onclick="window.location.href='messages.html'">
+                            <i class="fas fa-envelope"></i> Check Messages
                         </button>
                     </div>
                 </div>
 
-                <div style="background: var(--surface-color); border-radius: var(--border-radius); padding: 1.5rem; box-shadow: var(--shadow); border: 1px solid var(--border-color);">
-                    <h3 style="margin-bottom: 1rem;"><i class="fas fa-map-marker-alt"></i> Campus Map</h3>
-                    <div id="student-map" class="campus-map"></div>
-                    <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.5rem;">
-                        <button class="btn btn-info btn-small" onclick="showClassroomLocation('Room 201')">
-                            <i class="fas fa-location-arrow"></i> Find Math Classroom
-                        </button>
-                        <button class="btn btn-info btn-small" onclick="showClassroomLocation('Lab 103')">
-                            <i class="fas fa-location-arrow"></i> Find CS Lab
-                        </button>
-                        <button class="btn btn-info btn-small" onclick="showClassroomLocation('Room 305')">
-                            <i class="fas fa-location-arrow"></i> Find Physics Room
-                        </button>
+                <div class="recent-activity">
+                    <h3><i class="fas fa-clock"></i> Recent Activity</h3>
+                    <div class="activity-item">
+                        <div class="activity-icon" style="background: var(--secondary-color);">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600;">Assignment Submitted</div>
+                            <div style="font-size: 0.875rem; color: var(--text-muted);">Mathematics - 2 hours ago</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon" style="background: var(--info-color);">
+                            <i class="fas fa-comment"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600;">New Message</div>
+                            <div style="font-size: 0.875rem; color: var(--text-muted);">From Prof. Johnson - 4 hours ago</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon" style="background: var(--warning-color);">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600;">Grade Posted</div>
+                            <div style="font-size: 0.875rem; color: var(--text-muted);">Physics Lab - A- - Yesterday</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- End of Semester Alert -->
+                <div class="alert-message" style="background: linear-gradient(135deg, #f59e0b, #ef4444); color: white; padding: 1rem; border-radius: var(--border-radius); margin-top: 1rem; text-align: center;">
+                    <div style="font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem;">
+                        <i class="fas fa-clock"></i> Semester Ending Soon!
+                    </div>
+                    <div style="font-size: 0.875rem; margin-bottom: 0.5rem;">
+                        Complete all assignments and prepare for finals
+                    </div>
+                    <div id="countdown-small" style="font-size: 1.25rem; font-weight: 700;">
+                        <!-- Countdown will be populated by JavaScript -->
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <button id="logout-btn" class="logout-btn" onclick="logout()">
+    <!-- Logout Button -->
+    <button id="logout-btn" class="logout-btn" onclick="handleLogout()">
         <i class="fas fa-sign-out-alt"></i> Logout
     </button>
 
+    <!-- Toast Notifications -->
     <div id="toast" class="toast"></div>
 
     <script src="main.js"></script>
+    <script src="assets/scripts/messages.js"></script>
+    <script>
+        // Override the countdown function for the small countdown
+        function updateSmallCountdown() {
+            const endDate = new Date('December 20, 2024 23:59:59').getTime();
+            const now = new Date().getTime();
+            const distance = endDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+            const countdownElement = document.getElementById('countdown-small');
+            if (countdownElement) {
+                if (distance < 0) {
+                    countdownElement.innerHTML = 'Semester Ended!';
+                } else {
+                    countdownElement.innerHTML = `${days}d ${hours}h`;
+                }
+            }
+        }
+
+        // Initialize small countdown
+        document.addEventListener('DOMContentLoaded', function() {
+            updateSmallCountdown();
+            setInterval(updateSmallCountdown, 60000); // Update every minute
+        });
+    </script>
 </body>
 </html>

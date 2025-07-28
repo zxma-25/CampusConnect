@@ -218,36 +218,42 @@ function updateUIForLoggedInUser(user) {
     }, 1000);
 }
 
+function getUserRole(email) {
+    if (email.endsWith('@campus.admin')) return 'admin';
+    if (email.endsWith('@campus.edu')) return 'teacher';
+    if (email.endsWith('@campus.stu')) return 'student';
+    return 'unknown';
+}
+
 function redirectToUserDashboard(user) {
-    if (user.email.includes('admin')) {
+    const role = getUserRole(user.email);
+    if (role === 'admin') {
         window.location.href = 'admin-dashboard.html';
-    } else if (user.email.includes('teacher')) {
+    } else if (role === 'teacher') {
         window.location.href = 'teacher-dashboard.html';
-    } else {
+    } else if (role === 'student') {
         window.location.href = 'student-dashboard.html';
+    } else {
+        window.location.href = 'index.html';
     }
 }
 
 function checkAuthState() {
     const storedUser = sessionStorage.getItem('user');
-    
     // For dashboard pages, redirect if not logged in
     if (window.location.pathname.includes('dashboard')) {
         if (!storedUser) {
             window.location.href = 'index.html';
             return;
         }
-        
         try {
             const user = JSON.parse(storedUser);
-            
-            // Role-based access control
-            if (window.location.pathname.includes('admin-dashboard') && !user.email.includes('admin')) {
+            const role = getUserRole(user.email);
+            if (window.location.pathname.includes('admin-dashboard') && role !== 'admin') {
                 redirectToUserDashboard(user);
-            } else if (window.location.pathname.includes('teacher-dashboard') && !user.email.includes('teacher')) {
+            } else if (window.location.pathname.includes('teacher-dashboard') && role !== 'teacher') {
                 redirectToUserDashboard(user);
-            } else if (window.location.pathname.includes('student-dashboard') && 
-                       !user.email.includes('student') && !user.email.includes('lesedi')) {
+            } else if (window.location.pathname.includes('student-dashboard') && role !== 'student') {
                 redirectToUserDashboard(user);
             }
         } catch (e) {
@@ -270,12 +276,11 @@ function checkAuthState() {
 function updateWelcomeMessage() {
     const storedUser = sessionStorage.getItem('user');
     const welcomeTitle = document.getElementById('welcome-title');
-    
     if (storedUser && welcomeTitle) {
         try {
             const user = JSON.parse(storedUser);
             const username = user.email.split('@')[0];
-            
+            const role = getUserRole(user.email);
             if (window.location.pathname.includes('admin-dashboard')) {
                 welcomeTitle.textContent = `Welcome, Admin ${username}!`;
             } else if (window.location.pathname.includes('teacher-dashboard')) {

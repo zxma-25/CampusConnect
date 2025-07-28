@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grades - CampusConnect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <header class="header">
+        <div class="nav-container">
+            <a href="student-dashboard.html" class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>CampusConnect</span>
+            </a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="student-dashboard.html" class="nav-link">Dashboard</a></li>
+                    <li><a href="courses.html" class="nav-link">Courses</a></li>
+                    <li><a href="grades.html" class="nav-link active">Grades</a></li>
+                    <li><a href="calendar.html" class="nav-link">Calendar</a></li>
+                    <li><a href="messages.html" class="nav-link">Messages</a></li>
+                </ul>
+            </nav>
+            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+    <div class="main-container">
+        <section class="welcome-section">
+            <h1 class="welcome-title">Grades</h1>
+            <p class="welcome-subtitle">View your academic performance and grades here.</p>
+        </section>
+
+        <!-- Grade Summary Cards -->
+        <div class="stats-grid">
+            <div class="stat-card" data-animate="fadeInUp" style="animation-delay: 0.1s">
+                <div class="stat-header">
+                    <div class="stat-icon" style="background: var(--primary-color);">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i> 0.15
+                    </div>
+                </div>
+                <div class="stat-value" id="current-gpa">3.85</div>
+                <div class="stat-label">Current GPA</div>
+            </div>
+
+            <div class="stat-card" data-animate="fadeInUp" style="animation-delay: 0.2s">
+                <div class="stat-header">
+                    <div class="stat-icon" style="background: var(--secondary-color);">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i> 2
+                    </div>
+                </div>
+                <div class="stat-value" id="courses-count">5</div>
+                <div class="stat-label">Active Courses</div>
+            </div>
+
+            <div class="stat-card" data-animate="fadeInUp" style="animation-delay: 0.3s">
+                <div class="stat-header">
+                    <div class="stat-icon" style="background: var(--warning-color);">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <div class="stat-change neutral">
+                        <i class="fas fa-minus"></i> 0
+                    </div>
+                </div>
+                <div class="stat-value" id="assignments-completed">18</div>
+                <div class="stat-label">Assignments Completed</div>
+            </div>
+
+            <div class="stat-card" data-animate="fadeInUp" style="animation-delay: 0.4s">
+                <div class="stat-header">
+                    <div class="stat-icon" style="background: var(--info-color);">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i> 1
+                    </div>
+                </div>
+                <div class="stat-value" id="a-grades">4</div>
+                <div class="stat-label">A Grades</div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="main-panel">
+                <h3 style="color: var(--text-color); margin-bottom: 1.5rem;">
+                    <i class="fas fa-graduation-cap"></i> Course Grades
+                </h3>
+                
+                <!-- Course Grade Cards -->
+                <div class="grade-cards">
+                    <!-- MATH101 -->
+                    <div class="grade-card">
+                        <div class="grade-header">
+                            <div class="course-info">
+                                <h4>MATH101 - Advanced Mathematics</h4>
+                                <p>Prof. Johnson</p>
+                            </div>
+                            <div class="course-grade">
+                                <div class="grade-letter">A-</div>
+                                <div class="grade-percentage">92.5%</div>
+                            </div>
+                        </div>
+                        
+                        <div class="grade-breakdown">
+                            <div class="grade-item">
+                                <span class="grade-label">Assignment #1</span>
+                                <span class="grade-score">95/100</span>
+                                <span class="grade-percent">95%</span>
+                            </div>
+                            <div class="grade-item">
+                                <span class="grade-label">Assignment #2</span>
+                                <span class="grade-score">88/100</span>
+                                <span class="grade-percent">88%</span>
+                            </div>
+                            <div class="grade-item">
+                                <span class="grade-label">Midterm Exam</span>
+                                <span class="grade-score">94/100</span>
+                                <span class="grade-percent">94%</span>
+                            </div>
+                            <div class="grade-item">
+                                <span class="grade-label">Assignment #3</span>
+                                <span class="grade-score pending">Pending</span>
+                                <span class="grade-percent">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MATH201 -->
+                    <div class="grade-card">
+                        <div class="grade-header">
+                            <div class="course-info">
+                                <h4>MATH201 - Statistics & Probability</h4>
+                                <p>Dr. Smith</p>
+                            </div>
+                            <div class="course-grade">
+                                <div class="grade-letter">A</div>
+                                <div class="grade-percentage">94.2%</div>
+                            </div>
+                        </div>
+                        
+                        <div class="grade-breakdown">
+                            <div class="grade-item">
+                                <span class="grade-label">Quiz #1</span>
+                                <span class="grade-score">96/100</span>
+                                <span class="grade-percent">96%</span>
+                            </div>
+                            <div class="grade-item">
+                                <span class="grade-label">Project Report</span>
+                                <span class="grade-score">92/100</span>
+                                <span class="grade-percent">92%</span>
+                            </div>
+                            <div class="grade-item">
+                                <span class="grade-label">Final Exam</span>
+                                <span class="grade-score">95/100</span>
+                                <span class="grade-percent">95%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ENG101 -->
+                    <div class="grade-card">
+                        <div class="grade-header">
+                            <div class="course-info">
+                                <h4>ENG101 - English Literature</h4>
+                                <p>Prof. Williams</p>
+                            </div>
+                            <div class="course-grade">
+                                <div class="grade-letter">B+</div>
+                                <div class="grade-percentage">87.8%</div>
+                            </div>
+                        </div>
+                        
+                        <div class="grade-breakdown">
+                            <div class="grade-item">
+                                <span class="grade-label">Essay #1</span>
+                                <span class="grade-score">85/100</span>
+                                <span class="grade-percent">85%</span>
+                            </div>
+                            <div class="grade-item">
+                                <span class="grade-label">Class Participation</span>
+                                <span class="grade-score">90/100</span>
+                                <span class="grade-percent">90%</span>
+                            </div>
+                            <div class="grade-item">
+                                <span class="grade-label">Final Essay</span>
+                                <span class="grade-score pending">Pending</span>
+                                <span class="grade-percent">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PHY101 -->
+                    <div class="grade-card">
+                        <div class="grade-header">
+                            <div class="course-info">
+                                <h4>PHY101 - Physics Fundamentals</h4>
+                                <p>Dr. Brown</p>
+                            </div>
+                            <div class="course-grade">
+                                <div class="grade-letter">A-</div>
+                                <div class="grade-percentage">91.3%</div>
+                            </div>
+                        </div>
+                        
+                        <div class="grade-breakdown">
+                            <div class="grade-item">
+                                <span class="grade-label">Lab Report #1</span>
+                                <span class="grade-score">93/100</span>
+                                <span class="grade-percent">93%</span>
+                            </div>
+                            <div class="grade-item">
+                                <span class="grade-label">Midterm Exam</span>
+                                <span class="grade-score">89/100</span>
+                                <span class="grade-percent">89%</span>
+                            </div>
+                            <div class="grade-item">
+                                <span class="grade-label">Lab Report #2</span>
+                                <span class="grade-score">92/100</span>
+                                <span class="grade-percent">92%</span>
+                            </div>
+                            <div class="grade-item">
+                                <span class="grade-label">Final Lab Report</span>
+                                <span class="grade-score pending">Pending</span>
+                                <span class="grade-percent">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="side-panel">
+                <!-- GPA History Chart -->
+                <div class="gpa-history">
+                    <h3><i class="fas fa-chart-area"></i> GPA History</h3>
+                    <div class="gpa-chart">
+                        <div class="gpa-point" style="left: 0%; top: 20%;" data-gpa="3.7" data-semester="Fall 2023"></div>
+                        <div class="gpa-point" style="left: 25%; top: 15%;" data-gpa="3.75" data-semester="Spring 2024"></div>
+                        <div class="gpa-point" style="left: 50%; top: 10%;" data-gpa="3.8" data-semester="Summer 2024"></div>
+                        <div class="gpa-point current" style="left: 75%; top: 8%;" data-gpa="3.85" data-semester="Fall 2024"></div>
+                        <div class="gpa-line"></div>
+                    </div>
+                    <div class="gpa-labels">
+                        <span>Fall 2023</span>
+                        <span>Spring 2024</span>
+                        <span>Summer 2024</span>
+                        <span>Fall 2024</span>
+                    </div>
+                </div>
+
+                <!-- Recent Grade Updates -->
+                <div class="recent-grades">
+                    <h3><i class="fas fa-clock"></i> Recent Updates</h3>
+                    <div class="grade-update">
+                        <div class="update-icon" style="background: var(--success-color);">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="update-info">
+                            <div class="update-title">Physics Midterm Graded</div>
+                            <div class="update-detail">89/100 (89%) - PHY101</div>
+                            <div class="update-time">2 hours ago</div>
+                        </div>
+                    </div>
+                    <div class="grade-update">
+                        <div class="update-icon" style="background: var(--success-color);">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="update-info">
+                            <div class="update-title">Statistics Final Graded</div>
+                            <div class="update-detail">95/100 (95%) - MATH201</div>
+                            <div class="update-time">1 day ago</div>
+                        </div>
+                    </div>
+                    <div class="grade-update">
+                        <div class="update-icon" style="background: var(--warning-color);">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="update-info">
+                            <div class="update-title">English Essay Pending</div>
+                            <div class="update-detail">Final Essay - ENG101</div>
+                            <div class="update-time">Due Dec 18</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grade Distribution -->
+                <div class="grade-distribution">
+                    <h3><i class="fas fa-chart-pie"></i> Grade Distribution</h3>
+                    <div class="distribution-item">
+                        <span class="grade-range">A (90-100%)</span>
+                        <div class="distribution-bar">
+                            <div class="bar-fill" style="width: 60%; background: var(--success-color);"></div>
+                        </div>
+                        <span class="distribution-count">3</span>
+                    </div>
+                    <div class="distribution-item">
+                        <span class="grade-range">B (80-89%)</span>
+                        <div class="distribution-bar">
+                            <div class="bar-fill" style="width: 40%; background: var(--warning-color);"></div>
+                        </div>
+                        <span class="distribution-count">2</span>
+                    </div>
+                    <div class="distribution-item">
+                        <span class="grade-range">C (70-79%)</span>
+                        <div class="distribution-bar">
+                            <div class="bar-fill" style="width: 0%; background: var(--error-color);"></div>
+                        </div>
+                        <span class="distribution-count">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast" class="toast"></div>
+
+    <script src="main.js"></script>
+    <script>
+        // GPA History Chart Interaction
+        document.addEventListener('DOMContentLoaded', function() {
+            const gpaPoints = document.querySelectorAll('.gpa-point');
+            
+            gpaPoints.forEach(point => {
+                point.addEventListener('mouseenter', function() {
+                    const gpa = this.dataset.gpa;
+                    const semester = this.dataset.semester;
+                    
+                    // Create tooltip
+                    const tooltip = document.createElement('div');
+                    tooltip.className = 'gpa-tooltip';
+                    tooltip.innerHTML = `
+                        <div class="tooltip-semester">${semester}</div>
+                        <div class="tooltip-gpa">GPA: ${gpa}</div>
+                    `;
+                    
+                    this.appendChild(tooltip);
+                });
+                
+                point.addEventListener('mouseleave', function() {
+                    const tooltip = this.querySelector('.gpa-tooltip');
+                    if (tooltip) {
+                        tooltip.remove();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html> 
