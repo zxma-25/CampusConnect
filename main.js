@@ -240,27 +240,9 @@ function redirectToUserDashboard(user) {
 
 function checkAuthState() {
     const storedUser = sessionStorage.getItem('user');
-    // For dashboard pages, redirect if not logged in
-    if (window.location.pathname.includes('dashboard')) {
-        if (!storedUser) {
-            window.location.href = 'index.html';
-            return;
-        }
-        try {
-            const user = JSON.parse(storedUser);
-            const role = getUserRole(user.email);
-            if (window.location.pathname.includes('admin-dashboard') && role !== 'admin') {
-                redirectToUserDashboard(user);
-            } else if (window.location.pathname.includes('teacher-dashboard') && role !== 'teacher') {
-                redirectToUserDashboard(user);
-            } else if (window.location.pathname.includes('student-dashboard') && role !== 'student') {
-                redirectToUserDashboard(user);
-            }
-        } catch (e) {
-            sessionStorage.removeItem('user');
-            window.location.href = 'index.html';
-        }
-    } else {
+    
+    // Check if we're on the main login page
+    if (window.location.pathname.includes('index.html') || window.location.pathname === '/') {
         // For main page, redirect if already logged in
         if (storedUser) {
             try {
@@ -270,6 +252,36 @@ function checkAuthState() {
                 sessionStorage.removeItem('user');
             }
         }
+        return;
+    }
+    
+    // For all other pages, check if user is logged in
+    if (!storedUser) {
+        window.location.href = 'index.html';
+        return;
+    }
+    
+    try {
+        const user = JSON.parse(storedUser);
+        const role = getUserRole(user.email);
+        
+        // Check role-based access for dashboard pages
+        if (window.location.pathname.includes('admin-dashboard') && role !== 'admin') {
+            redirectToUserDashboard(user);
+        } else if (window.location.pathname.includes('teacher-dashboard') && role !== 'teacher') {
+            redirectToUserDashboard(user);
+        } else if (window.location.pathname.includes('student-dashboard') && role !== 'student') {
+            redirectToUserDashboard(user);
+        }
+        
+        // Allow students to access all student pages (courses, grades, calendar, messages)
+        // Allow teachers to access teacher pages
+        // Allow admins to access admin pages
+        // No additional restrictions needed for role-appropriate pages
+        
+    } catch (e) {
+        sessionStorage.removeItem('user');
+        window.location.href = 'index.html';
     }
 }
 
