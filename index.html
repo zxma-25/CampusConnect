@@ -102,28 +102,128 @@
 </main>
     <script src="assets/scripts/main.js"></script>
     <script>
-      // Ensure the DOM is loaded before attaching the event
+      // Client-side authentication for GitHub Pages
       document.addEventListener('DOMContentLoaded', function() {
         var signinBtn = document.getElementById('signin-btn');
+        var emailInput = document.getElementById('email');
+        var passwordInput = document.getElementById('password');
+        
+        // Load users from users.txt file
+        function loadUsers() {
+          return fetch('users.txt')
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Could not load users file');
+              }
+              return response.text();
+            })
+            .then(data => {
+              return data.split('\n')
+                .map(line => line.trim())
+                .filter(line => line.length > 0)
+                .map(line => {
+                  const parts = line.split(',');
+                  return { email: parts[0], password: parts[1] };
+                });
+            });
+        }
+        
+        function authenticateUser(email, password) {
+          return loadUsers()
+            .then(users => {
+              const user = users.find(u => u.email === email && u.password === password);
+              return user ? { success: true, user: { email: user.email } } : { success: false };
+            })
+            .catch(error => {
+              console.error('Authentication error:', error);
+              return { success: false, error: 'Could not load user database' };
+            });
+        }
+        
         if (signinBtn) {
           signinBtn.addEventListener('click', function() {
-            var email = document.getElementById('email').value;
-            var password = document.getElementById('password').value;
-            fetch('/login', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ email, password })
-            })
-            .then(res => res.json())
-            .then(data => {
-              if (data.success) {
-                document.getElementById('signin-modal').style.display = 'none';
-                alert('Login successful!');
-              } else {
-                alert(data.message || 'Login failed');
-              }
-            });
+            var email = emailInput.value.trim();
+            var password = passwordInput.value;
+            
+            // Basic validation
+            if (!email || !password) {
+              alert('Please enter both email and password');
+              return;
+            }
+            
+            // Disable button during login
+            signinBtn.disabled = true;
+            signinBtn.textContent = 'Signing in...';
+            
+            authenticateUser(email, password)
+              .then(result => {
+                if (result.success) {
+                  document.getElementById('signin-modal').style.display = 'none';
+                  alert('Welcome! Login successful.');
+                  
+                  // Store user info in session storage
+                  sessionStorage.setItem('user', JSON.stringify(result.user));
+                  
+                  // Update UI to show logged in state
+                  updateUIForLoggedInUser(result.user);
+                } else {
+                  alert(result.error || 'Invalid email or password. Please check your credentials.');
+                }
+              })
+              .catch(error => {
+                console.error('Login error:', error);
+                alert('An error occurred during login. Please try again.');
+              })
+              .finally(() => {
+                // Re-enable button
+                signinBtn.disabled = false;
+                signinBtn.textContent = 'Sign In';
+              });
           });
+        }
+        
+        // Allow Enter key to submit the form
+        if (passwordInput) {
+          passwordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+              signinBtn.click();
+            }
+          });
+        }
+        
+                 // Update UI for logged in user
+         function updateUIForLoggedInUser(user) {
+           // Update the welcome message if it exists
+           var welcomeElement = document.querySelector('h1');
+           if (welcomeElement && welcomeElement.textContent.includes('Welcome')) {
+             welcomeElement.textContent = 'Welcome, ' + user.email.split('@')[0] + '!';
+           }
+           
+           // Add logout button if it doesn't exist
+           if (!document.getElementById('logout-btn')) {
+             var logoutBtn = document.createElement('button');
+             logoutBtn.id = 'logout-btn';
+             logoutBtn.textContent = 'Logout';
+             logoutBtn.style.cssText = 'position:fixed;top:20px;right:20px;padding:0.5rem 1rem;background:#f44336;color:white;border:none;border-radius:4px;cursor:pointer;z-index:1001;';
+             logoutBtn.addEventListener('click', function() {
+               sessionStorage.removeItem('user');
+               location.reload();
+             });
+             document.body.appendChild(logoutBtn);
+           }
+         }
+        
+        // Check if user is already logged in on page load
+        var storedUser = sessionStorage.getItem('user');
+        if (storedUser) {
+          try {
+            var user = JSON.parse(storedUser);
+            document.getElementById('signin-modal').style.display = 'none';
+            updateUIForLoggedInUser(user);
+          } catch (e) {
+            // Clear invalid stored data
+            sessionStorage.removeItem('user');
+          }
         }
       });
     </script>
