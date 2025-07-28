@@ -971,6 +971,21 @@
             setTimeout(() => {
                 welcomeTitle.style.animation = 'fadeInUp 0.8s ease';
             }, 10);
+
+            // Redirect to appropriate dashboard after 1 second
+            setTimeout(() => {
+                redirectToUserDashboard(user);
+            }, 1000);
+        }
+
+        function redirectToUserDashboard(user) {
+            if (user.email.includes('admin')) {
+                window.location.href = 'admin-dashboard.html';
+            } else if (user.email.includes('teacher')) {
+                window.location.href = 'teacher-dashboard.html';
+            } else {
+                window.location.href = 'student-dashboard.html';
+            }
         }
 
         function checkAuthState() {
@@ -978,8 +993,8 @@
             if (storedUser) {
                 try {
                     app.currentUser = JSON.parse(storedUser);
-                    closeModal();
-                    updateUIForLoggedInUser(app.currentUser);
+                    // If user is already logged in, redirect to their dashboard
+                    redirectToUserDashboard(app.currentUser);
                 } catch (e) {
                     sessionStorage.removeItem('user');
                 }
