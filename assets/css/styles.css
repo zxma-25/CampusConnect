@@ -1,0 +1,50 @@
+/* Basic styles for CampusConnect */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+.header {
+    background: white;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#logo-header {
+    width: 40px;
+    height: 40px;
+}
+
+.nav-tabs ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-tabs a {
+    text-decoration: none;
+    color: #666;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.nav-tabs a:hover,
+.nav-tabs a.active {
+    background-color: #1976d2;
+    color: white;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin: 2rem 0;
+}
