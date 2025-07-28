@@ -2,21 +2,84 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const app = express();
-app.use(express.json());
 
+// Middleware
+app.use(express.json());
+app.use(express.static('.')); // Serve static files from the current directory
+
+// Serve the main page
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Authentication endpoint
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
+  
+  // Validate input
+  if (!email || !password) {
+    return res.status(400).json({ 
+      success: false, 
+      message: 'Email and password are required' 
+    });
+  }
+
   const usersFile = path.join(__dirname, 'users.txt');
+  
+  // Check if users file exists
+  if (!fs.existsSync(usersFile)) {
+    return res.status(500).json({ 
+      success: false, 
+      message: 'User database not found' 
+    });
+  }
+
   fs.readFile(usersFile, 'utf8', (err, data) => {
-    if (err) return res.status(500).send('Server error');
-    const users = data.split('\n').map(line => line.trim().split(','));
-    const user = users.find(u => u[0] === email && u[1] === password);
-    if (user) {
-      res.json({ success: true });
-    } else {
-      res.json({ success: false, message: 'Invalid credentials' });
+    if (err) {
+      console.error('Error reading users file:', err);
+      return res.status(500).json({ 
+        success: false, 
+        message: 'Server error occurred' 
+      });
+    }
+
+    try {
+      // Parse users data
+      const users = data.split('\n')
+        .map(line => line.trim())
+        .filter(line => line.length > 0)
+        .map(line => {
+          const parts = line.split(',');
+          return { email: parts[0], password: parts[1] };
+        });
+
+      // Find matching user
+      const user = users.find(u => u.email === email.trim() && u.password === password);
+      
+      if (user) {
+        res.json({ 
+          success: true, 
+          message: 'Login successful',
+          user: { email: user.email } // Don't send password back
+        });
+      } else {
+        res.status(401).json({ 
+          success: false, 
+          message: 'Invalid email or password' 
+        });
+      }
+    } catch (parseError) {
+      console.error('Error parsing users data:', parseError);
+      res.status(500).json({ 
+        success: false, 
+        message: 'Error processing user data' 
+      });
     }
   });
 });
 
-app.listen(3000, () => console.log('Server running on port 3000'));
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+  console.log(`Visit http://localhost:${PORT} to access the website`);
+});

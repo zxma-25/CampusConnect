@@ -105,10 +105,24 @@
       // Ensure the DOM is loaded before attaching the event
       document.addEventListener('DOMContentLoaded', function() {
         var signinBtn = document.getElementById('signin-btn');
+        var emailInput = document.getElementById('email');
+        var passwordInput = document.getElementById('password');
+        
         if (signinBtn) {
           signinBtn.addEventListener('click', function() {
-            var email = document.getElementById('email').value;
-            var password = document.getElementById('password').value;
+            var email = emailInput.value.trim();
+            var password = passwordInput.value;
+            
+            // Basic validation
+            if (!email || !password) {
+              alert('Please enter both email and password');
+              return;
+            }
+            
+            // Disable button during login
+            signinBtn.disabled = true;
+            signinBtn.textContent = 'Signing in...';
+            
             fetch('/login', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -118,11 +132,37 @@
             .then(data => {
               if (data.success) {
                 document.getElementById('signin-modal').style.display = 'none';
-                alert('Login successful!');
+                alert('Welcome! Login successful.');
+                
+                // Store user info (you might want to use sessionStorage or localStorage)
+                if (data.user) {
+                  sessionStorage.setItem('user', JSON.stringify(data.user));
+                }
+                
+                // You could redirect or update the UI here
+                location.reload(); // Simple approach to refresh the page
               } else {
-                alert(data.message || 'Login failed');
+                alert(data.message || 'Login failed. Please check your credentials.');
               }
+            })
+            .catch(error => {
+              console.error('Login error:', error);
+              alert('An error occurred during login. Please try again.');
+            })
+            .finally(() => {
+              // Re-enable button
+              signinBtn.disabled = false;
+              signinBtn.textContent = 'Sign In';
             });
+          });
+        }
+        
+        // Allow Enter key to submit the form
+        if (passwordInput) {
+          passwordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+              signinBtn.click();
+            }
           });
         }
       });
