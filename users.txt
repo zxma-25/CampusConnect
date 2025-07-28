@@ -1,9 +1,9 @@
 
-admin@campus.edu,admin123
-student1@campus.edu,password123
-student2@campus.edu,mypassword
+admin@campus.admin,admin123
+student1@campus.stu,password123
+student2@campus.stu,mypassword
 teacher@campus.edu,teachpass
-lesedi.mahlangu@campus.edu,lesedi2024
-Zama@campus.edu,zama1234
-Ofentse@campus.edu,fen2025
+lesedi mahlangu@campus.stu,lesedi2024
+Zama@campus.stu,zama1234
+Ofentse@campus.stu,fen2025
 teacherjoseph@campus.edu,joseph123
