@@ -42,6 +42,16 @@ A cutting-edge, interactive student portal with modern design, dark/light mode, 
 - **Live data updates** every 30 seconds
 - **Accessible design** with proper ARIA labels
 
+### 🗺️ **Google Maps Integration**
+- **Interactive campus maps** in all dashboards
+- **Role-based map features** (Student, Teacher, Admin views)
+- **Building markers** with detailed information popups
+- **Classroom finder** with quick navigation buttons
+- **Emergency locations** and safety information
+- **Parking areas** with real-time availability
+- **Custom map styling** matching application theme
+- **Mobile-responsive** map interactions
+
 ### 🔐 **Advanced Authentication**
 - **Smooth login flow** with loading states
 - **Error handling** with user-friendly messages
@@ -181,6 +191,17 @@ node server.js
 - **Context-aware colors** that adapt to theme
 - **Persistent preferences** across sessions
 
+## 🗺️ Google Maps Setup
+
+To enable Google Maps functionality:
+
+1. **Get Google Maps API Key**: Follow the guide in `GOOGLE_MAPS_SETUP.md`
+2. **Replace placeholder**: Update `YOUR_API_KEY` in all dashboard HTML files
+3. **Configure restrictions**: Secure your API key with domain restrictions
+4. **Customize coordinates**: Update campus location in `main.js`
+
+See `GOOGLE_MAPS_SETUP.md` for detailed setup instructions.
+
 ## 🚀 Future Enhancements
 
 - [ ] **Real-time messaging** system
@@ -191,6 +212,9 @@ node server.js
 - [ ] **Search functionality** with live results
 - [ ] **Progressive Web App** features
 - [ ] **Push notifications** for updates
+- [x] **Google Maps integration** ✨ (Recently added!)
+- [ ] **Directions API** for campus navigation
+- [ ] **Real-time location** tracking
 
 ## 📱 Browser Support
 
