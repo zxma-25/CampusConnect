@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const app = express();
 
-// Middleware
+
 app.use(express.json());
 app.use(express.static('.')); // Serve static files from the current directory
 
