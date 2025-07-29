@@ -56,11 +56,18 @@ function getRole(email) {
     return 'unknown';
 }
 
-async function fetchUsers() {
-    const res = await fetch('/api/users');
-    const data = await res.json();
-    return data.success ? data.users : [];
-}
+// Dummy static user list (same as users panel)
+const users = [
+    { email: 'zama@campus.admin', password: 'admin123' },
+    { email: 'admin@campus.admin', password: 'admin123' },
+    { email: 'student1@campus.stu', password: 'password123' },
+    { email: 'student2@campus.stu', password: 'mypassword' },
+    { email: 'teacher@campus.edu', password: 'teachpass' },
+    { email: 'lesedi mahlangu@campus.stu', password: 'lesedi2024' },
+    { email: 'Zama@campus.stu', password: 'zama1234' },
+    { email: 'Ofentse@campus.stu', password: 'fen2025' },
+    { email: 'teacherjoseph@campus.edu', password: 'joseph123' }
+];
 
 function generateReport(users) {
     const total = users.length;
@@ -86,8 +93,7 @@ function usersToCSV(users) {
     return csv;
 }
 
-document.addEventListener('DOMContentLoaded', async function() {
-    const users = await fetchUsers();
+document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('report-summary').innerHTML = generateReport(users);
     document.getElementById('download-csv').addEventListener('click', function() {
         const csv = usersToCSV(users);

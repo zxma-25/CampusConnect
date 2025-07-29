@@ -69,18 +69,25 @@ function getRole(email) {
     return 'unknown';
 }
 
-async function fetchUsers() {
-    const res = await fetch('/api/users');
-    const data = await res.json();
-    return data.success ? data.users : [];
-}
+// Dummy static user list
+let users = [
+    { email: 'zama@campus.admin', password: 'admin123' },
+    { email: 'admin@campus.admin', password: 'admin123' },
+    { email: 'student1@campus.stu', password: 'password123' },
+    { email: 'student2@campus.stu', password: 'mypassword' },
+    { email: 'teacher@campus.edu', password: 'teachpass' },
+    { email: 'lesedi mahlangu@campus.stu', password: 'lesedi2024' },
+    { email: 'Zama@campus.stu', password: 'zama1234' },
+    { email: 'Ofentse@campus.stu', password: 'fen2025' },
+    { email: 'teacherjoseph@campus.edu', password: 'joseph123' }
+];
 
-function renderUserList(users, filter) {
+function renderUserList(usersArr, filter) {
     const list = document.getElementById('user-list');
     if (!list) return;
-    let filtered = users;
+    let filtered = usersArr;
     if (filter && filter !== 'all') {
-        filtered = users.filter(u => getRole(u.email) === filter);
+        filtered = usersArr.filter(u => getRole(u.email) === filter);
     }
     if (filtered.length === 0) {
         list.innerHTML = '<div style="color:var(--text-muted);margin-top:2rem;">No users found.</div>';
@@ -100,32 +107,18 @@ function renderUserList(users, filter) {
     `).join('');
 }
 
-async function removeUser(email) {
-    const res = await fetch('/api/users', {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
-    });
-    const data = await res.json();
-    if (data.success) {
-        showToast('User removed', 'success');
-        loadAndRenderUsers();
-    } else {
-        showToast(data.message || 'Failed to remove user', 'error');
-    }
-}
-
-async function loadAndRenderUsers() {
-    window._users = await fetchUsers();
-    renderUserList(window._users, document.getElementById('user-role-filter').value);
+function removeUser(email) {
+    users = users.filter(u => u.email !== email);
+    showToast('User removed (demo only, not saved)', 'warning');
+    renderUserList(users, document.getElementById('user-role-filter').value);
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    loadAndRenderUsers();
+    renderUserList(users, 'all');
     document.getElementById('user-role-filter').addEventListener('change', function() {
-        renderUserList(window._users, this.value);
+        renderUserList(users, this.value);
     });
-    document.getElementById('add-user-form').addEventListener('submit', async function(e) {
+    document.getElementById('add-user-form').addEventListener('submit', function(e) {
         e.preventDefault();
         const email = document.getElementById('add-user-email').value.trim();
         const password = document.getElementById('add-user-password').value;
@@ -133,19 +126,14 @@ document.addEventListener('DOMContentLoaded', function() {
             showToast('Email and password required', 'error');
             return;
         }
-        const res = await fetch('/api/users', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
-        });
-        const data = await res.json();
-        if (data.success) {
-            showToast('User added', 'success');
-            this.reset();
-            loadAndRenderUsers();
-        } else {
-            showToast(data.message || 'Failed to add user', 'error');
+        if (users.some(u => u.email === email)) {
+            showToast('User already exists', 'error');
+            return;
         }
+        users.push({ email, password });
+        showToast('User added (demo only, not saved)', 'success');
+        this.reset();
+        renderUserList(users, document.getElementById('user-role-filter').value);
     });
 });
 </script>
