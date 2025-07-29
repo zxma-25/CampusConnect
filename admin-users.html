@@ -38,7 +38,16 @@
         <div class="dashboard-grid">
             <div class="main-panel">
                 <h3><i class="fas fa-users"></i> Users List</h3>
-                <div class="user-list-placeholder" style="margin-top:2rem; color:var(--text-muted);">User management functionality coming soon.</div>
+                <div style="margin-bottom:1rem;">
+                    <label for="user-role-filter" style="font-weight:500;">Filter by role:</label>
+                    <select id="user-role-filter" class="form-input" style="width:auto; display:inline-block; margin-left:0.5rem;">
+                        <option value="all">All</option>
+                        <option value="admin">Admin</option>
+                        <option value="teacher">Teacher</option>
+                        <option value="student">Student</option>
+                    </select>
+                </div>
+                <div id="user-list" class="user-list"></div>
             </div>
         </div>
     </div>
@@ -47,5 +56,56 @@
     </button>
     <div id="toast" class="toast"></div>
     <script src="main.js"></script>
+    <script>
+// Simple role detection based on email
+function getRole(email) {
+    if (email.includes('@campus.admin')) return 'admin';
+    if (email.includes('@campus.edu')) return 'teacher';
+    if (email.includes('@campus.stu')) return 'student';
+    return 'unknown';
+}
+
+function renderUserList(users, filter) {
+    const list = document.getElementById('user-list');
+    if (!list) return;
+    let filtered = users;
+    if (filter && filter !== 'all') {
+        filtered = users.filter(u => getRole(u.email) === filter);
+    }
+    if (filtered.length === 0) {
+        list.innerHTML = '<div style="color:var(--text-muted);margin-top:2rem;">No users found.</div>';
+        return;
+    }
+    list.innerHTML = filtered.map(u => `
+        <div class="user-item" style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;">
+            <div class="user-avatar" style="background:var(--primary-color);width:2.5rem;height:2.5rem;display:flex;align-items:center;justify-content:center;color:white;font-weight:600;border-radius:50%;">
+                ${u.email[0].toUpperCase()}
+            </div>
+            <div style="flex:1;">
+                <div style="font-weight:600;">${u.email}</div>
+                <div style="font-size:0.9rem;color:var(--text-muted);">Role: ${getRole(u.email)}</div>
+            </div>
+            <button class="btn btn-danger btn-small" onclick="removeUser('${u.email}')"><i class="fas fa-trash"></i> Remove</button>
+        </div>
+    `).join('');
+}
+
+function removeUser(email) {
+    showToast('User removal is a demo feature (client-side only)', 'warning');
+    // Optionally, remove from UI for demo
+    window._users = window._users.filter(u => u.email !== email);
+    renderUserList(window._users, document.getElementById('user-role-filter').value);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    loadUsers().then(users => {
+        window._users = users;
+        renderUserList(users, 'all');
+        document.getElementById('user-role-filter').addEventListener('change', function() {
+            renderUserList(window._users, this.value);
+        });
+    });
+});
+</script>
 </body>
 </html>
