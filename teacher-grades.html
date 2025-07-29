@@ -1,0 +1,86 @@
+ <!DOCTYPE html>
+   <html lang="en">
+   <head>
+       <meta charset="UTF-8">
+       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <title>Grade Book - CampusConnect</title>
+       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+       <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+       <link href="styles.css" rel="stylesheet">
+   </head>
+   <body>
+       <div class="bg-animation"></div>
+       <header class="header">
+           <div class="nav-container">
+               <a href="index.html" class="logo">
+                   <i class="fas fa-graduation-cap"></i>
+                   <span>CampusConnect</span>
+               </a>
+               <nav>
+                   <ul class="nav-menu">
+                       <li><a href="teacher-dashboard.html" class="nav-link">Dashboard</a></li>
+                       <li><a href="teacher-classes.html" class="nav-link">My Classes</a></li>
+                       <li><a href="teacher-gradebook.html" class="nav-link active">Grade Book</a></li>
+                       <li><a href="teacher-assignments.html" class="nav-link">Assignments</a></li>
+                       <li><a href="teacher-schedule.html" class="nav-link">Schedule</a></li>
+                       <li><a href="teacher-profile.html" class="nav-link">Profile</a></li>
+                       <li><a href="teacher-settings.html" class="nav-link">Settings</a></li>
+                   </ul>
+               </nav>
+               <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                   <i class="fas fa-moon"></i>
+               </button>
+           </div>
+       </header>
+       <div class="main-container">
+           <section class="welcome-section">
+               <h1 class="welcome-title">Grade Book</h1>
+               <p class="welcome-subtitle">View and edit student grades for your classes.</p>
+           </section>
+           <div class="dashboard-grid">
+               <div class="main-panel">
+                   <table class="gradebook-table" style="width:100%;margin:auto;border-collapse:collapse;">
+                       <thead>
+                           <tr style="background:var(--surface-color);">
+                               <th style="padding:0.5rem 1rem;">Student</th>
+                               <th style="padding:0.5rem 1rem;">Grade</th>
+                               <th style="padding:0.5rem 1rem;">Action</th>
+                           </tr>
+                       </thead>
+                       <tbody id="gradebook-body"></tbody>
+                   </table>
+               </div>
+           </div>
+       </div>
+       <button id="logout-btn" class="logout-btn" onclick="logout()">
+           <i class="fas fa-sign-out-alt"></i> Logout
+       </button>
+       <div id="toast" class="toast"></div>
+       <script src="main.js"></script>
+       <script>
+       let students = [
+           { name: 'Alice Smith', grade: 'A' },
+           { name: 'Bob Johnson', grade: 'B   ' },
+           { name: 'Charlie Lee', grade: 'A-' },
+           { name: 'Diana King', grade: 'B' }
+       ];
+       function renderGradebook() {
+           const body = document.getElementById('gradebook-body');
+           body.innerHTML = students.map((s, i) => `
+               <tr>
+                   <td style="padding:0.5rem 1rem;">${s.name}</td>
+                   <td style="padding:0.5rem 1rem;"><input type="text" value="${s.grade}" onchange="updateGrade(${i}, this.value)" style="width:50px;text-align:center;"></td>
+                   <td style="padding:0.5rem 1rem;"><button class='btn btn-secondary btn-small' onclick='saveGrade(${i})'><i class="fas fa-save"></i> Save</button></td>
+               </tr>
+           `).join('');
+       }
+       function updateGrade(idx, value) {
+           students[idx].grade = value;
+       }
+       function saveGrade(idx) {
+           showToast('Grade updated (demo only, not saved)', 'success');
+       }
+       document.addEventListener('DOMContentLoaded', renderGradebook);
+       </script>
+   </body>
+   </html>

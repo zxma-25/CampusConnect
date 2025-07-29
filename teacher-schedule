@@ -1,0 +1,71 @@
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Schedule - CampusConnect</title>
+     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+     <link href="styles.css" rel="stylesheet">
+ </head>
+ <body>
+     <div class="bg-animation"></div>
+     <header class="header">
+         <div class="nav-container">
+             <a href="index.html" class="logo">
+                 <i class="fas fa-graduation-cap"></i>
+                 <span>CampusConnect</span>
+             </a>
+             <nav>
+                 <ul class="nav-menu">
+                     <li><a href="teacher-dashboard.html" class="nav-link">Dashboard</a></li>
+                     <li><a href="teacher-classes.html" class="nav-link">My Classes</a></li>
+                     <li><a href="teacher-gradebook.html" class="nav-link">Grade Book</a></li>
+                     <li><a href="teacher-assignments.html" class="nav-link">Assignments</a></li>
+                     <li><a href="teacher-schedule.html" class="nav-link active">Schedule</a></li>
+                     <li><a href="teacher-profile.html" class="nav-link">Profile</a></li>
+                     <li><a href="teacher-settings.html" class="nav-link">Settings</a></li>
+                 </ul>
+             </nav>
+             <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                 <i class="fas fa-moon"></i>
+             </button>
+         </div>
+     </header>
+     <div class="main-container">
+         <section class="welcome-section">
+             <h1 class="welcome-title">Schedule</h1>
+             <p class="welcome-subtitle">View your weekly teaching schedule.</p>
+         </section>
+         <div class="dashboard-grid">
+             <div class="main-panel">
+                 <table class="schedule-table" style="width:100%;margin:auto;border-collapse:collapse;">
+                     <thead>
+                         <tr style="background:var(--surface-color);">
+                             <th style="padding:0.5rem 1rem;">Day</th>
+                             <th style="padding:0.5rem 1rem;">Time</th>
+                             <th style="padding:0.5rem 1rem;">Class</th>
+                             <th style="padding:0.5rem 1rem;">Room</th>
+                         </tr>
+                     </thead>
+                     <tbody>
+                         <tr><td>Mon</td><td>9:00-10:00</td><td>Advanced Mathematics</td><td>201</td></tr>
+                         <tr><td>Mon</td><td>11:00-12:00</td><td>Statistics</td><td>210</td></tr>
+                         <tr><td>Tue</td><td>2:00-3:30</td><td>Calculus I</td><td>105</td></tr>
+                         <tr><td>Wed</td><td>9:00-10:00</td><td>Advanced Mathematics</td><td>201</td></tr>
+                         <tr><td>Wed</td><td>11:00-12:00</td><td>Statistics</td><td>210</td></tr>
+                         <tr><td>Thu</td><td>2:00-3:30</td><td>Calculus I</td><td>105</td></tr>
+                         <tr><td>Fri</td><td>9:00-10:00</td><td>Advanced Mathematics</td><td>201</td></tr>
+                         <tr><td>Fri</td><td>11:00-12:00</td><td>Statistics</td><td>210</td></tr>
+                     </tbody>
+                 </table>
+             </div>
+         </div>
+     </div>
+     <button id="logout-btn" class="logout-btn" onclick="logout()">
+         <i class="fas fa-sign-out-alt"></i> Logout
+     </button>
+     <div id="toast" class="toast"></div>
+     <script src="main.js"></script>
+ </body>
+ </html>

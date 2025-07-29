@@ -1,0 +1,69 @@
+
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Teacher Profile - CampusConnect</title>
+     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+     <link href="styles.css" rel="stylesheet">
+ </head>
+ <body>
+     <div class="bg-animation"></div>
+     <header class="header">
+         <div class="nav-container">
+             <a href="index.html" class="logo">
+                 <i class="fas fa-graduation-cap"></i>
+                 <span>CampusConnect</span>
+             </a>
+             <nav>
+                 <ul class="nav-menu">
+                     <li><a href="teacher-dashboard.html" class="nav-link">Dashboard</a></li>
+                     <li><a href="teacher-classes.html" class="nav-link">My Classes</a></li>
+                     <li><a href="teacher-gradebook.html" class="nav-link">Grade Book</a></li>
+                     <li><a href="teacher-assignments.html" class="nav-link">Assignments</a></li>
+                     <li><a href="teacher-schedule.html" class="nav-link">Schedule</a></li>
+                     <li><a href="teacher-profile.html" class="nav-link active">Profile</a></li>
+                     <li><a href="teacher-settings.html" class="nav-link">Settings</a></li>
+                 </ul>
+             </nav>
+             <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                 <i class="fas fa-moon"></i>
+             </button>
+         </div>
+     </header>
+     <div class="main-container">
+         <section class="welcome-section">
+             <h1 class="welcome-title">Teacher Profile</h1>
+             <p class="welcome-subtitle">View and update your personal information.</p>
+         </section>
+         <div class="dashboard-grid">
+             <div class="main-panel">
+                 <form id="profile-form" style="max-width:400px;margin:auto;">
+                     <div class="form-group">
+                         <label for="teacher-name" class="form-label">Name</label>
+                         <input type="text" id="teacher-name" class="form-input" value="Prof. Johnson" required>
+                     </div>
+                     <div class="form-group">
+                         <label for="teacher-email" class="form-label">Email</label>
+                         <input type="email" id="teacher-email" class="form-input" value="teacher@campus.edu" required>
+                     </div>
+                     <button type="submit" class="btn btn-primary btn-small"><i class="fas fa-save"></i> Save Changes</button>
+                 </form>
+             </div>
+         </div>
+     </div>
+     <button id="logout-btn" class="logout-btn" onclick="logout()">
+         <i class="fas fa-sign-out-alt"></i> Logout
+     </button>
+     <div id="toast" class="toast"></div>
+     <script src="main.js"></script>
+     <script>
+     document.getElementById('profile-form').addEventListener('submit', function(e) {
+         e.preventDefault();
+         showToast('Profile updated (demo only, not saved)', 'success');
+     });
+     </script>
+ </body>
+ </html>

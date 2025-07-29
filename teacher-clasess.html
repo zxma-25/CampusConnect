@@ -1,0 +1,106 @@
+ <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>My Classes - CampusConnect</title>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+      <link href="styles.css" rel="stylesheet">
+  </head>
+  <body>
+      <div class="bg-animation"></div>
+      <header class="header">
+          <div class="nav-container">
+              <a href="index.html" class="logo">
+                  <i class="fas fa-graduation-cap"></i>
+                  <span>CampusConnect</span>
+              </a>
+              <nav>
+                  <ul class="nav-menu">
+                      <li><a href="teacher-dashboard.html" class="nav-link">Dashboard</a></li>
+                      <li><a href="teacher-classes.html" class="nav-link active">My Classes</a></li>
+                      <li><a href="teacher-gradebook.html" class="nav-link">Grade Book</a></li>
+                      <li><a href="teacher-assignments.html" class="nav-link">Assignments</a></li>
+                      <li><a href="teacher-schedule.html" class="nav-link">Schedule</a></li>
+                      <li><a href="teacher-profile.html" class="nav-link">Profile</a></li>
+                      <li><a href="teacher-settings.html" class="nav-link">Settings</a></li>
+                  </ul>
+              </nav>
+              <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                  <i class="fas fa-moon"></i>
+              </button>
+          </div>
+      </header>
+      <div class="main-container">
+          <section class="welcome-section">
+              <h1 class="welcome-title">My Classes</h1>
+              <p class="welcome-subtitle">Manage your classes here.</p>
+          </section>
+          <div class="dashboard-grid">
+              <div class="main-panel">
+                  <form id="add-class-form" style="display:flex;gap:0.5rem;align-items:center;margin-bottom:1rem;flex-wrap:wrap;">
+                      <input type="text" id="add-class-code" class="form-input" placeholder="Code" required style="width:90px;">
+                      <input type="text" id="add-class-title" class="form-input" placeholder="Title" required style="width:180px;">
+                      <input type="text" id="add-class-schedule" class="form-input" placeholder="Schedule" required style="width:140px;">
+                      <input type="text" id="add-class-room" class="form-input" placeholder="Room" required style="width:90px;">
+                      <button type="submit" class="btn btn-primary btn-small"><i class="fas fa-plus"></i> Add Class</button>
+                  </form>
+                  <div id="class-list" class="class-list"></div>
+              </div>
+          </div>
+      </div>
+      <button id="logout-btn" class="logout-btn" onclick="logout()">
+          <i class="fas fa-sign-out-alt"></i> Logout
+      </button>
+      <div id="toast" class="toast"></div>
+      <script src="main.js"></script>
+      <script>
+      let classes = [
+          { code: 'MATH301', title: 'Advanced Mathematics', schedule: 'MWF 9:00-10:00', room: '201' },
+          { code: 'MATH151', title: 'Calculus I', schedule: 'TTh 2:00-3:30', room: '105' },
+          { code: 'STAT200', title: 'Statistics', schedule: 'MWF 11:00-12:00', room: '210' }
+      ];
+      function renderClassList() {
+          const list = document.getElementById('class-list');
+          if (!list) return;
+          if (classes.length === 0) {
+              list.innerHTML = '<div style="color:var(--text-muted);margin-top:2rem;">No classes found.</div>';
+              return;
+          }
+          list.innerHTML = classes.map((c, i) => `
+              <div class="class-item" style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;flex-wrap:wrap;">
+                  <div style="flex:1;min-width:90px;"><b>${c.code}</b></div>
+                  <div style="flex:2;min-width:180px;">${c.title}</div>
+                  <div style="flex:1.5;min-width:140px;">${c.schedule}</div>
+                  <div style="flex:1;min-width:90px;">${c.room}</div>
+                  <button class="btn btn-danger btn-small" onclick="removeClass(${i})"><i class="fas fa-trash"></i> Remove</button>
+              </div>
+          `).join('');
+      }
+      function removeClass(idx) {
+          classes.splice(idx, 1);
+          showToast('Class removed (demo only, not saved)', 'warning');
+          renderClassList();
+      }
+      document.addEventListener('DOMContentLoaded', function() {
+          renderClassList();
+          document.getElementById('add-class-form').addEventListener('submit', function(e) {
+              e.preventDefault();
+              const code = document.getElementById('add-class-code').value.trim();
+              const title = document.getElementById('add-class-title').value.trim();
+              const schedule = document.getElementById('add-class-schedule').value.trim();
+              const room = document.getElementById('add-class-room').value.trim();
+              if (!code || !title || !schedule || !room) {
+                  showToast('All fields are required', 'error');
+                  return;
+              }
+              classes.push({ code, title, schedule, room });
+              showToast('Class added (demo only, not saved)', 'success');
+              this.reset();
+              renderClassList();
+          });
+      });
+      </script>
+  </body>
+  </html>

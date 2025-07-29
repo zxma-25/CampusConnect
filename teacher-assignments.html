@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Assignments - CampusConnect</title>
+     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+     <link href="styles.css" rel="stylesheet">
+ </head>
+ <body>
+     <div class="bg-animation"></div>
+     <header class="header">
+         <div class="nav-container">
+             <a href="index.html" class="logo">
+                 <i class="fas fa-graduation-cap"></i>
+                 <span>CampusConnect</span>
+             </a>
+             <nav>
+                 <ul class="nav-menu">
+                     <li><a href="teacher-dashboard.html" class="nav-link">Dashboard</a></li>
+                     <li><a href="teacher-classes.html" class="nav-link">My Classes</a></li>
+                     <li><a href="teacher-gradebook.html" class="nav-link">Grade Book</a></li>
+                     <li><a href="teacher-assignments.html" class="nav-link active">Assignments</a></li>
+                     <li><a href="teacher-schedule.html" class="nav-link">Schedule</a></li>
+                     <li><a href="teacher-profile.html" class="nav-link">Profile</a></li>
+                     <li><a href="teacher-settings.html" class="nav-link">Settings</a></li>
+                 </ul>
+             </nav>
+             <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                 <i class="fas fa-moon"></i>
+             </button>
+         </div>
+     </header>
+     <div class="main-container">
+         <section class="welcome-section">
+             <h1 class="welcome-title">Assignments</h1>
+             <p class="welcome-subtitle">Manage assignments for your classes.</p>
+         </section>
+         <div class="dashboard-grid">
+             <div class="main-panel">
+                 <form id="add-assignment-form" style="display:flex;gap:0.5rem;align-items:center;margin-bottom:1rem;flex-wrap:wrap;">
+                     <input type="text" id="add-assignment-title" class="form-input" placeholder="Title" required style="width:180px;">
+                     <input type="date" id="add-assignment-due" class="form-input" required style="width:140px;">
+                     <button type="submit" class="btn btn-primary btn-small"><i class="fas fa-plus"></i> Add Assignment</button>
+                 </form>
+                 <div id="assignment-list" class="assignment-list"></div>
+             </div>
+         </div>
+     </div>
+     <button id="logout-btn" class="logout-btn" onclick="logout()">
+         <i class="fas fa-sign-out-alt"></i> Logout
+     </button>
+     <div id="toast" class="toast"></div>
+     <script src="main.js"></script>
+     <script>
+     let assignments = [
+         { title: 'Midterm Exam', due: '2024-10-15' },
+         { title: 'Homework 5', due: '2024-10-20' },
+         { title: 'Project Proposal', due: '2024-10-25' }
+     ];
+     function renderAssignmentList() {
+         const list = document.getElementById('assignment-list');
+         if (!list) return;
+         if (assignments.length === 0) {
+             list.innerHTML = '<div style="color:var(--text-muted);margin-top:2rem;">No assignments found.</div>';
+             return;
+         }
+         list.innerHTML = assignments.map((a, i) => `
+             <div class="assignment-item" style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;flex-wrap:wrap;">
+                 <div style="flex:2;min-width:180px;">${a.title}</div>
+                 <div style="flex:1.5;min-width:140px;">Due: ${a.due}</div>
+                 <button class="btn btn-danger btn-small" onclick="removeAssignment(${i})"><i class="fas fa-trash"></i> Remove</button>
+             </div>
+         `).join('');
+     }
+     function removeAssignment(idx) {
+         assignments.splice(idx, 1);
+         showToast('Assignment removed (demo only, not saved)', 'warning');
+         renderAssignmentList();
+     }
+     document.addEventListener('DOMContentLoaded', function() {
+         renderAssignmentList();
+         document.getElementById('add-assignment-form').addEventListener('submit', function(e) {
+             e.preventDefault();
+             const title = document.getElementById('add-assignment-title').value.trim();
+             const due = document.getElementById('add-assignment-due').value;
+             if (!title || !due) {
+                 showToast('All fields are required', 'error');
+                 return;
+             }
+             assignments.push({ title, due });
+             showToast('Assignment added (demo only, not saved)', 'success');
+             this.reset();
+             renderAssignmentList();
+         });
+     });
+     </script>
+ </body>
+ </html>
