@@ -1,4 +1,4 @@
-
+zama@campus.admin,admin123
 admin@campus.admin,admin123
 student1@campus.stu,password123
 student2@campus.stu,mypassword
