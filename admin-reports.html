@@ -38,7 +38,8 @@
         <div class="dashboard-grid">
             <div class="main-panel">
                 <h3><i class="fas fa-file-alt"></i> Reports</h3>
-                <div class="reports-placeholder" style="margin-top:2rem; color:var(--text-muted);">Reports functionality coming soon.</div>
+                <div id="report-summary" style="margin-bottom:2rem;"></div>
+                <button class="btn btn-primary btn-small" id="download-csv"><i class="fas fa-download"></i> Download Users CSV</button>
             </div>
         </div>
     </div>
@@ -47,5 +48,60 @@
     </button>
     <div id="toast" class="toast"></div>
     <script src="main.js"></script>
+    <script>
+function getRole(email) {
+    if (email.includes('@campus.admin')) return 'admin';
+    if (email.includes('@campus.edu')) return 'teacher';
+    if (email.includes('@campus.stu')) return 'student';
+    return 'unknown';
+}
+
+async function fetchUsers() {
+    const res = await fetch('/api/users');
+    const data = await res.json();
+    return data.success ? data.users : [];
+}
+
+function generateReport(users) {
+    const total = users.length;
+    const admins = users.filter(u => getRole(u.email) === 'admin').length;
+    const teachers = users.filter(u => getRole(u.email) === 'teacher').length;
+    const students = users.filter(u => getRole(u.email) === 'student').length;
+    return `
+        <div style="margin-bottom:1rem;font-weight:500;">User Summary</div>
+        <ul style="margin-bottom:1rem;">
+            <li>Total users: <b>${total}</b></li>
+            <li>Admins: <b>${admins}</b></li>
+            <li>Teachers: <b>${teachers}</b></li>
+            <li>Students: <b>${students}</b></li>
+        </ul>
+    `;
+}
+
+function usersToCSV(users) {
+    let csv = 'Email,Role\n';
+    users.forEach(u => {
+        csv += `${u.email},${getRole(u.email)}\n`;
+    });
+    return csv;
+}
+
+document.addEventListener('DOMContentLoaded', async function() {
+    const users = await fetchUsers();
+    document.getElementById('report-summary').innerHTML = generateReport(users);
+    document.getElementById('download-csv').addEventListener('click', function() {
+        const csv = usersToCSV(users);
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'users-report.csv';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    });
+});
+</script>
 </body>
 </html>
