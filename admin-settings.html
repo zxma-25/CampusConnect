@@ -38,6 +38,17 @@
         <div class="dashboard-grid">
             <div class="main-panel">
                 <h3><i class="fas fa-cogs"></i> Settings</h3>
+                <form id="admin-settings-form" style="margin-bottom:1.5rem;">
+                    <div class="form-group">
+                        <label for="admin-email" class="form-label">Admin Contact Email</label>
+                        <input type="email" id="admin-email" class="form-input" value="admin@campus.edu" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-small"><i class="fas fa-save"></i> Save Email</button>
+                </form>
+                <div style="margin-bottom:1.5rem;">
+                    <label style="font-weight:500;">Theme:</label>
+                    <button class="btn btn-secondary btn-small" id="toggle-theme-btn" type="button"><i class="fas fa-adjust"></i> Toggle Dark Mode</button>
+                </div>
                 <div class="settings-placeholder" style="margin-top:2rem; color:var(--text-muted);">Settings management functionality coming soon.</div>
             </div>
         </div>
@@ -47,5 +58,16 @@
     </button>
     <div id="toast" class="toast"></div>
     <script src="main.js"></script>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('admin-settings-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        showToast('Admin email updated (demo only, not saved)', 'success');
+    });
+    document.getElementById('toggle-theme-btn').addEventListener('click', function() {
+        toggleTheme();
+    });
+});
+</script>
 </body>
 </html>
