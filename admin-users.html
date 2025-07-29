@@ -38,6 +38,11 @@
         <div class="dashboard-grid">
             <div class="main-panel">
                 <h3><i class="fas fa-users"></i> Users List</h3>
+                <form id="add-user-form" style="display:flex;gap:0.5rem;align-items:center;margin-bottom:1rem;">
+                    <input type="email" id="add-user-email" class="form-input" placeholder="Email" required style="width:200px;">
+                    <input type="password" id="add-user-password" class="form-input" placeholder="Password" required style="width:150px;">
+                    <button type="submit" class="btn btn-primary btn-small"><i class="fas fa-user-plus"></i> Add User</button>
+                </form>
                 <div style="margin-bottom:1rem;">
                     <label for="user-role-filter" style="font-weight:500;">Filter by role:</label>
                     <select id="user-role-filter" class="form-input" style="width:auto; display:inline-block; margin-left:0.5rem;">
@@ -57,12 +62,17 @@
     <div id="toast" class="toast"></div>
     <script src="main.js"></script>
     <script>
-// Simple role detection based on email
 function getRole(email) {
     if (email.includes('@campus.admin')) return 'admin';
     if (email.includes('@campus.edu')) return 'teacher';
     if (email.includes('@campus.stu')) return 'student';
     return 'unknown';
+}
+
+async function fetchUsers() {
+    const res = await fetch('/api/users');
+    const data = await res.json();
+    return data.success ? data.users : [];
 }
 
 function renderUserList(users, filter) {
@@ -90,20 +100,52 @@ function renderUserList(users, filter) {
     `).join('');
 }
 
-function removeUser(email) {
-    showToast('User removal is a demo feature (client-side only)', 'warning');
-    // Optionally, remove from UI for demo
-    window._users = window._users.filter(u => u.email !== email);
+async function removeUser(email) {
+    const res = await fetch('/api/users', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+    });
+    const data = await res.json();
+    if (data.success) {
+        showToast('User removed', 'success');
+        loadAndRenderUsers();
+    } else {
+        showToast(data.message || 'Failed to remove user', 'error');
+    }
+}
+
+async function loadAndRenderUsers() {
+    window._users = await fetchUsers();
     renderUserList(window._users, document.getElementById('user-role-filter').value);
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    loadUsers().then(users => {
-        window._users = users;
-        renderUserList(users, 'all');
-        document.getElementById('user-role-filter').addEventListener('change', function() {
-            renderUserList(window._users, this.value);
+    loadAndRenderUsers();
+    document.getElementById('user-role-filter').addEventListener('change', function() {
+        renderUserList(window._users, this.value);
+    });
+    document.getElementById('add-user-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const email = document.getElementById('add-user-email').value.trim();
+        const password = document.getElementById('add-user-password').value;
+        if (!email || !password) {
+            showToast('Email and password required', 'error');
+            return;
+        }
+        const res = await fetch('/api/users', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
         });
+        const data = await res.json();
+        if (data.success) {
+            showToast('User added', 'success');
+            this.reset();
+            loadAndRenderUsers();
+        } else {
+            showToast(data.message || 'Failed to add user', 'error');
+        }
     });
 });
 </script>
