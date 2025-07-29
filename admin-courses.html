@@ -38,7 +38,15 @@
         <div class="dashboard-grid">
             <div class="main-panel">
                 <h3><i class="fas fa-book"></i> Courses List</h3>
-                <div class="course-list-placeholder" style="margin-top:2rem; color:var(--text-muted);">Course management functionality coming soon.</div>
+                <form id="add-course-form" style="display:flex;gap:0.5rem;align-items:center;margin-bottom:1rem;flex-wrap:wrap;">
+                    <input type="text" id="add-course-code" class="form-input" placeholder="Code" required style="width:90px;">
+                    <input type="text" id="add-course-title" class="form-input" placeholder="Title" required style="width:180px;">
+                    <input type="text" id="add-course-instructor" class="form-input" placeholder="Instructor" required style="width:140px;">
+                    <input type="text" id="add-course-schedule" class="form-input" placeholder="Schedule" required style="width:140px;">
+                    <input type="text" id="add-course-room" class="form-input" placeholder="Room" required style="width:90px;">
+                    <button type="submit" class="btn btn-primary btn-small"><i class="fas fa-plus"></i> Add Course</button>
+                </form>
+                <div id="course-list" class="course-list"></div>
             </div>
         </div>
     </div>
@@ -47,5 +55,71 @@
     </button>
     <div id="toast" class="toast"></div>
     <script src="main.js"></script>
+    <script>
+// Dummy static course list
+let courses = [
+    { code: 'MATH101', title: 'Advanced Mathematics', instructor: 'Prof. Johnson', schedule: 'Mon, Wed, Fri 09:00-10:30', room: 'Room 201' },
+    { code: 'ENG101', title: 'English Literature', instructor: 'Dr. Wilson', schedule: 'Tue, Thu 11:00-12:30', room: 'Room 105' },
+    { code: 'PHY101', title: 'Physics Fundamentals', instructor: 'Prof. Lee', schedule: 'Mon, Wed 14:00-15:30', room: 'Room 305' },
+    { code: 'CHEM101', title: 'General Chemistry', instructor: 'Dr. Smith', schedule: 'Fri 10:00-12:00', room: 'Lab 103' }
+];
+
+function renderCourseList() {
+    const list = document.getElementById('course-list');
+    if (!list) return;
+    if (courses.length === 0) {
+        list.innerHTML = '<div style="color:var(--text-muted);margin-top:2rem;">No courses found.</div>';
+        return;
+    }
+    list.innerHTML = courses.map((c, i) => `
+        <div class="course-item" style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;flex-wrap:wrap;">
+            <div style="flex:1;min-width:90px;"><b>${c.code}</b></div>
+            <div style="flex:2;min-width:180px;">${c.title}</div>
+            <div style="flex:1.5;min-width:140px;">${c.instructor}</div>
+            <div style="flex:1.5;min-width:140px;">${c.schedule}</div>
+            <div style="flex:1;min-width:90px;">${c.room}</div>
+            <button class="btn btn-secondary btn-small" onclick="editCourse(${i})"><i class="fas fa-edit"></i> Edit</button>
+            <button class="btn btn-danger btn-small" onclick="removeCourse(${i})"><i class="fas fa-trash"></i> Remove</button>
+        </div>
+    `).join('');
+}
+
+function removeCourse(idx) {
+    courses.splice(idx, 1);
+    showToast('Course removed (demo only, not saved)', 'warning');
+    renderCourseList();
+}
+
+function editCourse(idx) {
+    const c = courses[idx];
+    document.getElementById('add-course-code').value = c.code;
+    document.getElementById('add-course-title').value = c.title;
+    document.getElementById('add-course-instructor').value = c.instructor;
+    document.getElementById('add-course-schedule').value = c.schedule;
+    document.getElementById('add-course-room').value = c.room;
+    removeCourse(idx);
+    showToast('Edit the fields and click Add Course to update (demo only)', 'info');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    renderCourseList();
+    document.getElementById('add-course-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const code = document.getElementById('add-course-code').value.trim();
+        const title = document.getElementById('add-course-title').value.trim();
+        const instructor = document.getElementById('add-course-instructor').value.trim();
+        const schedule = document.getElementById('add-course-schedule').value.trim();
+        const room = document.getElementById('add-course-room').value.trim();
+        if (!code || !title || !instructor || !schedule || !room) {
+            showToast('All fields are required', 'error');
+            return;
+        }
+        courses.push({ code, title, instructor, schedule, room });
+        showToast('Course added/updated (demo only, not saved)', 'success');
+        this.reset();
+        renderCourseList();
+    });
+});
+</script>
 </body>
 </html>
