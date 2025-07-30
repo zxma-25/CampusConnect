@@ -7,3 +7,4 @@ lesedi mahlangu@campus.stu,lesedi2024
 Zama@campus.stu,zama1234
 Ofentse@campus.stu,fen2025
 teacherjoseph@campus.edu,joseph123
+hrtest@campus.hr,hrtest

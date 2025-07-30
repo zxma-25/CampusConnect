@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emplyees - CampusConnect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <header class="header">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>CampusConnect</span>
+            </a>
+            <nav>
+                <ul class="nav-menu">
+                      <li><a href="hr-dashboard.html" class="nav-link">Dashboard</a></li>
+                    <li><a href="hr-employees.html" class="nav-link active">Emplyees</a></li>
+                    <li><a href="hr-meetingschedule.html" class="nav-link">Hr Meetings</a></li>
+                    <li><a href="hr-reports.html" class="nav-link">Reports</a></li>
+                    <li><a href="hr-settings.html" class="nav-link">Settings</a></li>
+                </ul>
+            </nav>
+            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+    <div class="main-container">
+        <section class="welcome-section">
+            <h1 class="welcome-title">Employee Management</h1>
+            <p class="welcome-subtitle">Set meetings or an email to the emplyees.</p>
+        </section>
+        <div class="dashboard-grid">
+            <div class="main-panel">
+                <h3><i class="fas fa-users"></i> Users List</h3>
+                <form id="add-user-form" style="display:flex;gap:0.5rem;align-items:center;margin-bottom:1rem;">
+                    <input type="email" id="add-user-email" class="form-input" placeholder="Email" required style="width:200px;">
+                    <input type="password" id="add-user-password" class="form-input" placeholder="Password" required style="width:150px;">
+                    <button type="submit" class="btn btn-primary btn-small"><i class="fas fa-user-plus"></i> Add User</button>
+                </form>
+                <div style="margin-bottom:1rem;">
+                    <label for="user-role-filter" style="font-weight:500;">Filter by role:</label>
+                    <select id="user-role-filter" class="form-input" style="width:auto; display:inline-block; margin-left:0.5rem;">
+                        <option value="all">All</option>
+                        <option value="admin">Admin</option>
+                        <option value="teacher">Teacher</option>
+                    </select>
+                </div>
+                <div id="user-list" class="user-list"></div>
+            </div>
+        </div>
+    </div>
+    <button id="logout-btn" class="logout-btn" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i> Logout
+    </button>
+    <div id="toast" class="toast"></div>
+    <script src="main.js"></script>
+    <script>
+function getRole(email) {
+    if (email.includes('@campus.admin')) return 'admin';
+    if (email.includes('@campus.edu')) return 'teacher';
+    return 'unknown';
+}
+
+// Dummy static user list
+let users = [
+    { email: 'zama@campus.admin', password: 'admin123' },
+    { email: 'admin@campus.admin', password: 'admin123' },
+    { email: 'teacher@campus.edu', password: 'teachpass' },
+    { email: 'teacherjoseph@campus.edu', password: 'joseph123' },
+    { email: 'hrtest@campus.hr', password: 'hrtest' }
+];
+
+function renderUserList(usersArr, filter) {
+    const list = document.getElementById('user-list');
+    if (!list) return;
+    let filtered = usersArr;
+    if (filter && filter !== 'all') {
+        filtered = usersArr.filter(u => getRole(u.email) === filter);
+    }
+    if (filtered.length === 0) {
+        list.innerHTML = '<div style="color:var(--text-muted);margin-top:2rem;">No users found.</div>';
+        return;
+    }
+    list.innerHTML = filtered.map(u => `
+        <div class="user-item" style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;">
+            <div class="user-avatar" style="background:var(--primary-color);width:2.5rem;height:2.5rem;display:flex;align-items:center;justify-content:center;color:white;font-weight:600;border-radius:50%;">
+                ${u.email[0].toUpperCase()}
+            </div>
+            <div style="flex:1;">
+                <div style="font-weight:600;">${u.email}</div>
+                <div style="font-size:0.9rem;color:var(--text-muted);">Role: ${getRole(u.email)}</div>
+            </div>
+            <button class="btn btn-danger btn-small" onclick="removeUser('${u.email}')"><i class="fas fa-trash"></i> Remove</button>
+        </div>
+    `).join('');
+}
+
+function removeUser(email) {
+    users = users.filter(u => u.email !== email);
+    showToast('User removed (demo only, not saved)', 'warning');
+    renderUserList(users, document.getElementById('user-role-filter').value);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    renderUserList(users, 'all');
+    document.getElementById('user-role-filter').addEventListener('change', function() {
+        renderUserList(users, this.value);
+    });
+    document.getElementById('add-user-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = document.getElementById('add-user-email').value.trim();
+        const password = document.getElementById('add-user-password').value;
+        if (!email || !password) {
+            showToast('Email and password required', 'error');
+            return;
+        }
+        if (users.some(u => u.email === email)) {
+            showToast('User already exists', 'error');
+            return;
+        }
+        users.push({ email, password });
+        showToast('User added (demo only, not saved)', 'success');
+        this.reset();
+        renderUserList(users, document.getElementById('user-role-filter').value);
+    });
+});
+</script>
+</body>
+</html>
