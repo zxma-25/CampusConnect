@@ -71,11 +71,55 @@
       </div>
 
       <div class="side-panel">
-        <!-- ... your Quick Actions and Recent Activity (unchanged) ... -->
-        <!-- Code omitted for brevity -->
-      </div>
-    </div>
+                <div class="quick-actions">
+                    <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                    <div class="action-buttons">
+                        <button class="action-btn" onclick="showToast('Opening course catalog...', 'success')">
+                            <i class="fas fa-search"></i> Browse Courses
+                        </button>
+                        <button class="action-btn secondary" onclick="showToast('Submitting assignment...', 'success')">
+                            <i class="fas fa-upload"></i> Submit Assignment
+                        </button>
+                        <button class="action-btn warning" onclick="showToast('Checking grades...', 'success')">
+                            <i class="fas fa-chart-bar"></i> View Grades
+                        </button>
+                    </div>
+                </div>
 
+                <div class="recent-activity">
+                    <h3><i class="fas fa-clock"></i> Recent Activity</h3>
+                    <div class="activity-item">
+                        <div class="activity-icon" style="background: var(--secondary-color);">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600;">Assignment Submitted</div>
+                            <div style="font-size: 0.875rem; color: var(--text-muted);">Mathematics - 2 hours ago</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon" style="background: var(--info-color);">
+                            <i class="fas fa-comment"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600;">New Message</div>
+                            <div style="font-size: 0.875rem; color: var(--text-muted);">From Prof. Johnson - 4 hours ago</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon" style="background: var(--warning-color);">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600;">Grade Posted</div>
+                            <div style="font-size: 0.875rem; color: var(--text-muted);">Physics Lab - A- - Yesterday</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- 🌍 Campus Map Section -->
     <section class="campus-map-section" style="margin-top: 3rem;">
       <h3><i class="fas fa-map-marker-alt"></i> Campus Map</h3>
