@@ -7,6 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="styles.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
     <div class="bg-animation"></div>
@@ -195,6 +197,20 @@
 
     <!-- Toast Notifications -->
     <div id="toast" class="toast"></div>
+        <script>
+  // Initialize the map and set its view
+  var map = L.map('map').setView([51.505, -0.09], 13); // [lat, lng], zoom level
+
+  // Add a tile layer (OpenStreetMap)
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
+
+  // Optional: Add a marker
+  L.marker([51.505, -0.09]).addTo(map)
+    .bindPopup('A pretty popup.<br> Easily customizable.')
+    .openPopup();
+</script>
 
     <script src="main.js"></script>
 </body>
