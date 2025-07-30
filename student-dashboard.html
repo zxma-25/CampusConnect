@@ -198,6 +198,18 @@
 
     <!-- Toast Notifications -->
     <div id="toast" class="toast"></div>
+    <!-- Leaflet Map Initialization -->
+  <script>
+    var map = L.map('map').setView([51.505, -0.09], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    L.marker([51.505, -0.09]).addTo(map)
+      .bindPopup('Main Campus')
+      .openPopup();
+  </script>
 
     <script src="main.js"></script>
     <script src="assets/scripts/messages.js"></script>
