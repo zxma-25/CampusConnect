@@ -237,9 +237,7 @@ function redirectToUserDashboard(user) {
         window.location.href = 'teacher-dashboard.html';
     } else if (role === 'student') {
         window.location.href = 'student-dashboard.html';
-    } else if (role=== 'hr') {
-        window.location.href = 'hr-dashboard.html';
-    } else {
+      } else {
         window.location.href = 'index.html';
     }
 }
@@ -304,10 +302,6 @@ function checkAuthState() {
             console.log('Non-student trying to access student dashboard, redirecting');
             sessionStorage.setItem('redirecting', 'true');
             redirectToUserDashboard(user);
-         } else if (currentPage === 'hr-dashboard.html' && role !== 'HR') {
-            console.log('Non-HR trying to access student dashboard, redirecting');
-            sessionStorage.setItem('redirecting', 'true');
-            redirectToUserDashboard(user);
             return;
         }
         
@@ -334,14 +328,13 @@ function updateWelcomeMessage() {
             const user = JSON.parse(storedUser);
             const username = user.email.split('@')[0];
             const role = getUserRole(user.email);
-            if (window.location.pathname.includes('admin-dashboard')) {
+            if (window.location.pathname.includes('HR-dashboard')) {
                 welcomeTitle.textContent = `Welcome, Admin ${username}!`;
             } else if (window.location.pathname.includes('teacher-dashboard')) {
                 welcomeTitle.textContent = `Welcome, Prof. ${username}!`;
             } else if (window.location.pathname.includes('student-dashboard')) {
                 welcomeTitle.textContent = `Welcome, ${username}!`;
-            } else if (window.location.pathname.includes('hr-dashboard')) {
-                welcomeTitle.textContent = `Welcome, ${username}!`;
+        
             }
         } catch (e) {
             // Keep default title
