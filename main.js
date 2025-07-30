@@ -305,6 +305,10 @@ function checkAuthState() {
             console.log('Non-student trying to access student dashboard, redirecting');
             sessionStorage.setItem('redirecting', 'true');
             redirectToUserDashboard(user);
+         } else if (currentPage === 'hr-dashboard.html' && role !== 'HR') {
+            console.log('Non-HR trying to access student dashboard, redirecting');
+            sessionStorage.setItem('redirecting', 'true');
+            redirectToUserDashboard(user);
             return;
         }
         
@@ -336,6 +340,8 @@ function updateWelcomeMessage() {
             } else if (window.location.pathname.includes('teacher-dashboard')) {
                 welcomeTitle.textContent = `Welcome, Prof. ${username}!`;
             } else if (window.location.pathname.includes('student-dashboard')) {
+                welcomeTitle.textContent = `Welcome, ${username}!`;
+            } else if (window.location.pathname.includes('hr-dashboard')) {
                 welcomeTitle.textContent = `Welcome, ${username}!`;
             }
         } catch (e) {
