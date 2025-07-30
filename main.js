@@ -226,7 +226,7 @@ function getUserRole(email) {
     if (email.endsWith('@campus.admin')) return 'admin';
     if (email.endsWith('@campus.edu')) return 'teacher';
     if (email.endsWith('@campus.stu')) return 'student';
-    if (email.endswith('@campus.hr')) return 'HR';
+    if (email.endswith('@campus.hr')) return 'hr';
     return 'unknown';
 }
 
@@ -238,7 +238,7 @@ function redirectToUserDashboard(user) {
         window.location.href = 'teacher-dashboard.html';
     } else if (role === 'student') {
         window.location.href = 'student-dashboard.html';
-    } else if (role=== 'HR') {
+    } else if (role=== 'hr') {
         window.location.href = 'hr-dashboard.html';
     } else {
         window.location.href = 'index.html';
