@@ -226,14 +226,13 @@ function getUserRole(email) {
     if (email.endsWith('@campus.admin')) return 'admin';
     if (email.endsWith('@campus.edu')) return 'teacher';
     if (email.endsWith('@campus.stu')) return 'student';
-    if (email.endswith('@campus.hr')) return 'hr';
     return 'unknown';
 }
 
 function redirectToUserDashboard(user) {
     const role = getUserRole(user.email);
     if (role === 'admin') {
-        window.location.href = 'admin-dashboard.html';
+        window.location.href = 'hr-dashboard.html';
     } else if (role === 'teacher') {
         window.location.href = 'teacher-dashboard.html';
     } else if (role === 'student') {
